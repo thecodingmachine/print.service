@@ -1,0 +1,18 @@
+{
+  "name": "print-service",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "",
+  "homepage": "https://github.com/thecodingmachine/print.service#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecodingmachine/print.service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thecodingmachine/print.service/issues"
+  },
+  "dependencies": {
+    "docxtemplater": "^2.1.2"
+  }
+}

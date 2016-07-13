@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+docker-compose -f $1/docker-compose-$2.yml up
