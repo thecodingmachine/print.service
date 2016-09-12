@@ -10,7 +10,6 @@ services:
     volumes:
       # main volume
       - .:/var/www/html:rw
-      - ./tmp:/tmp:rw
       # others
       - ./docker/ext-apcu.ini:/usr/local/etc/php/conf.d/ext-acpu.ini:ro
       - ./docker/01-fixing-apache-permissions:/etc/fix-attrs.d/01-fixing-apache-permissions:rw

@@ -28,6 +28,39 @@ $moufManager->setAllVariables(array (
 ));
 
 $moufManager->addComponentInstances(array (
+  'ApiController_v1' => 
+  array (
+    'class' => 'Api\\v1\\Controllers\\ApiController',
+    'external' => false,
+    'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'RequestParserService_v1',
+        'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'value' => 'DocumentTemplateService_v1',
+        'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  'DocumentTemplateService_v1' => 
+  array (
+    'class' => 'Api\\v1\\Services\\DocumentTemplateService',
+    'external' => false,
+    'weak' => false,
+  ),
   'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController',
@@ -356,6 +389,12 @@ $moufManager->addComponentInstances(array (
         ),
       ),
     ),
+  ),
+  'RequestParserService_v1' => 
+  array (
+    'class' => 'Api\\v1\\Services\\RequestParserService',
+    'external' => false,
+    'weak' => false,
   ),
   '__anonymous__2e32_1078724055' => 
   array (
@@ -1124,42 +1163,6 @@ return $driver;
       'chainWith' => 'apcCacheService',
     ),
   ),
-  'rootController' => 
-  array (
-    'class' => 'Api\\Controllers\\RootController',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 'bootstrapTemplate',
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      1 => 
-      array (
-        'value' => 'block.content',
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      2 => 
-      array (
-        'value' => 'twigEnvironment',
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-    ),
-  ),
   'rootUrlInlineWebLibrary' => 
   array (
     'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\InlineWebLibrary',
@@ -1447,6 +1450,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 		];
 	}
 	/**
+	 * @return Api\v1\Controllers\ApiController
+	 */
+	 public static function getApiController_v1() {
+	 	return MoufManager::getMoufManager()->get('ApiController_v1');
+	 }
+
+	/**
 	 * @return Mouf\Mvc\Splash\Controllers\HttpErrorsController
 	 */
 	 public static function getMoufMvcSplashControllersHttpErrorsController() {
@@ -1535,6 +1545,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getMoufMvcSplashSplashMiddleware() {
 	 	return MoufManager::getMoufManager()->get('Mouf\\Mvc\\Splash\\SplashMiddleware');
+	 }
+
+	/**
+	 * @return Api\v1\Services\RequestParserService
+	 */
+	 public static function getRequestParserService_v1() {
+	 	return MoufManager::getMoufManager()->get('RequestParserService_v1');
 	 }
 
 	/**
@@ -1713,13 +1730,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
-	 * @return Api\Controllers\RootController
-	 */
-	 public static function getRootController() {
-	 	return MoufManager::getMoufManager()->get('rootController');
-	 }
-
-	/**
 	 * @return Mouf\Html\Utils\WebLibraryManager\InlineWebLibrary
 	 */
 	 public static function getRootUrlInlineWebLibrary() {
@@ -1787,6 +1797,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getWhoopsMiddleware() {
 	 	return MoufManager::getMoufManager()->get('whoopsMiddleware');
+	 }
+
+	/**
+	 * @return Api\v1\Services\DocumentTemplateService
+	 */
+	 public static function getDocumentTemplateService_v1() {
+	 	return MoufManager::getMoufManager()->get('DocumentTemplateService_v1');
 	 }
 
 }

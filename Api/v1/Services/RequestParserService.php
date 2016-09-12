@@ -3,6 +3,7 @@ namespace Api\v1\Services;
 
 use Api\v1\Enumerations\ContentTypeEnumeration;
 use Api\v1\Exceptions\BadRequestException;
+use Api\v1\Exceptions\ForbiddenException;
 use Api\v1\Exceptions\MediaTypeException;
 use Api\v1\Models\Impl\DocxDocumentTemplate;
 use Api\v1\Models\Impl\HtmlDocumentTemplate;
@@ -31,19 +32,24 @@ class RequestParserService
      * @return array
      * @throws BadRequestException
      * @throws MediaTypeException
+     * @throws ForbiddenException
      */
     public function prepare(ServerRequestInterface $request, bool $isMerge = false): array
     {
         $accept = $request->getHeaderLine("Accept");
 
-        if (empty($accept)) {
+        if (empty($accept) || $accept == "*/*") {
             throw new MediaTypeException();
         }
 
         $body = $request->getParsedBody();
 
-        if (empty($body) || ($isMerge && !is_array($body))) {
+        if (empty($body)) {
             throw new BadRequestException();
+        }
+
+        if ((!$isMerge && is_array($body)) || ($isMerge && !is_array($body))) {
+            throw new ForbiddenException();
         }
 
         return [

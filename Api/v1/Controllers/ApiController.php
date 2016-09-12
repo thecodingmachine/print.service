@@ -14,6 +14,7 @@ use Zend\Diactoros\Response\JsonResponse;
  */
 class ApiController
 {
+
     /**
      * @var RequestParserService
      */
@@ -43,11 +44,17 @@ class ApiController
      */
     public function generate(ServerRequestInterface $request)
     {
+        // TODO basic auth
         try {
             $prepared = $this->requestParserService->prepare($request);
-            $parsed = $this->requestParserService->parse($prepared);
-            $documentTemplates = $this->documentTemplateService->downloadTemplates($parsed);
-            $documentTemplates = $this->documentTemplateService->populate($documentTemplates);
+            $documentTemplates = $this->requestParserService->parse($prepared);
+            $this->documentTemplateService->downloadTemplates($documentTemplates);
+            $this->documentTemplateService->populate($documentTemplates);
+            $finalDocumentPath = $this->documentTemplateService->merge($documentTemplates, $prepared["accept"]);
+
+            // TODO return final document.
+
+            return new JsonResponse([ "message" => $finalDocumentPath ]);
 
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
@@ -66,11 +73,17 @@ class ApiController
      */
     public function merge(ServerRequestInterface $request)
     {
+        // TODO basic auth
         try {
             $prepared = $this->requestParserService->prepare($request, true);
-            $parsed = $this->requestParserService->parse($prepared, true);
-            $documentTemplates = $this->documentTemplateService->downloadTemplates($parsed);
-            $documentTemplates = $this->documentTemplateService->populate($documentTemplates);
+            $documentTemplates = $this->requestParserService->parse($prepared, true);
+            $this->documentTemplateService->downloadTemplates($documentTemplates);
+            $this->documentTemplateService->populate($documentTemplates);
+            $finalDocumentPath = $this->documentTemplateService->merge($documentTemplates, $prepared["accept"]);
+
+            // TODO return final document.
+
+            return new JsonResponse([ "message" => $finalDocumentPath ]);
 
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([

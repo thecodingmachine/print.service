@@ -27,6 +27,8 @@ abstract class AbstractDocumentTemplate
      * @var string
      */
     protected $localPath;
+
+    // TODO: add var $resultPath
     
     /**
      * AbstractDocumentTemplate constructor.
