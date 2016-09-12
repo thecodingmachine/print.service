@@ -3,7 +3,7 @@ version: '2'
 
 services:
   php-apache:
-    build: ./docker/dev
+    build: ./docker
     container_name: printservice_api_dev
     ports:
       - 80:80
