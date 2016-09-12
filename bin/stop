@@ -1,3 +1,3 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-docker stop print_service_engine_$1
+docker stop printservice_api_$1

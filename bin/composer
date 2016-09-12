@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 docker pull composer/composer:alpine
-docker run --rm -v $1:/app composer/composer:alpine install
+docker run --rm -v $1:/app composer/composer:alpine $2

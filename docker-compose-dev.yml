@@ -4,19 +4,23 @@ version: '2'
 services:
   php-apache:
     build: ./docker/dev
-    container_name: print_service_engine_dev
+    container_name: printservice_api_dev
     ports:
-      - 8383:80 # web ports
-      - 9393:9000 # xdebug ports
+      - 80:80
     volumes:
+      # main volume
       - .:/var/www/html:rw
-      - ./docker/dev/php.ini:/usr/local/etc/php.ini:ro
-      - ./docker/dev/ext-apcu.ini:/usr/local/etc/php/conf.d/ext-acpu.ini:ro
-      - ./docker/dev/ext-xdebug.ini:/usr/local/etc/php/conf.d/ext-xdebug.ini:ro
+      - ./tmp:/tmp:rw
+      # others
+      - ./docker/ext-apcu.ini:/usr/local/etc/php/conf.d/ext-acpu.ini:ro
+      - ./docker/01-fixing-apache-permissions:/etc/fix-attrs.d/01-fixing-apache-permissions:rw
+      - ./docker/run:/etc/services.d/apache/run:rw
+      # ignored folders
+      - /var/www/html/bin
+      - /var/www/html/docker
+    restart: unless-stopped
     networks:
       - dev
-    dns_search:
-      - engine_dev
 
 networks:
   dev: {}

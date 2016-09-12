@@ -1,9 +1,9 @@
 {
   "name": "print-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "API for generating documents.",
   "license": "MIT",
-  "author": "",
+  "author": "TheCodingMachine",
   "homepage": "https://github.com/thecodingmachine/print.service#readme",
   "repository": {
     "type": "git",
@@ -13,6 +13,6 @@
     "url": "https://github.com/thecodingmachine/print.service/issues"
   },
   "dependencies": {
-    "docxtemplater": "^2.1.2"
+    "docxtemplater": "^2.1.5"
   }
 }

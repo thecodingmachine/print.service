@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-
-docker pull mkenney/npm:alpine
-docker run --rm -v $1:/src mkenney/npm:alpine npm install
