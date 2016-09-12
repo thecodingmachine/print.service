@@ -7,6 +7,7 @@ namespace Api\v1\Exceptions;
  */
 class UnauthorizedException extends \Exception
 {
+
     /**
      * UnauthorizedException constructor.
      */
@@ -15,4 +16,5 @@ class UnauthorizedException extends \Exception
         $this->code = 401;
         $this->message = "Unauthorized: appel non authentifié ou détails d'authentification non valides";
     }
+
 }

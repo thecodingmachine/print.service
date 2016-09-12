@@ -7,6 +7,7 @@ namespace Api\v1\Exceptions;
  */
 class BadRequestException extends \Exception
 {
+
     /**
      * BadRequestException constructor.
      */
@@ -15,4 +16,5 @@ class BadRequestException extends \Exception
         $this->code = 400;
         $this->message = "Bad Request: requête malformée, contenu non parsable";
     }
+
 }

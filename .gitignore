@@ -4,4 +4,5 @@ vendor
 mouf/no_commit
 node_modules
 npm-debug.log
-tmp
+tmp/*
+!tmp/.empty
