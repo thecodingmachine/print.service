@@ -1,0 +1,17 @@
+{% for htmlDocumentTemplate in htmlDocumentsTemplates %}
+
+        {% if htmlDocumentTemplate.populatedHeaderTemplatePath != null %}
+
+            {% include htmlDocumentTemplate.populatedHeaderTemplatePath %}
+
+        {% endif %}
+
+        {% include htmlDocumentTemplate.populatedTemplatePath %}
+
+        {% if htmlDocumentTemplate.populatedFooterTemplatePath != null %}
+
+            {% include htmlDocumentTemplate.populatedFooterTemplatePath %}
+
+        {% endif %}
+
+{% endfor %}
