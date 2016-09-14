@@ -19,16 +19,10 @@ class DocumentTemplateService
 {
 
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * DocumentTemplateService constructor.
      */
     public function __construct()
     {
-        $this->client = new Client();
     }
 
     /**
@@ -136,10 +130,11 @@ class DocumentTemplateService
 
         try {
             // TODO: checks if template not updated.
-            $templatePath = ROOT_PATH . "tmp/" .  $this->generateRandomName() . $fileExtension;
+            $templatePath = ROOT_PATH . "tmp/" . $this->generateRandomName() . $fileExtension;
             $template = fopen($templatePath, "w");
             $stream = \GuzzleHttp\Psr7\stream_for($template);
-            $this->client->request("GET", $url, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
+            $client = new Client();
+            $client->request("GET", $url, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
 
             return $templatePath;
         } catch (RequestException $e) {
@@ -206,7 +201,7 @@ class DocumentTemplateService
      */
     private function mergeAsHtml(array $documentTemplates): string
     {
-        // TODO: merge all document templates as html. Write in a html might be the best solution.
+        // TODO: merge all document templates as html. Write in a html file might be the best solution.
         return "";
     }
 
@@ -219,7 +214,7 @@ class DocumentTemplateService
      */
     private function mergeAsDocx(array $documentTemplates): string
     {
-        // TODO: merge all document templates as docx. Uses a script to add pages to a new file.
+        // TODO: merge all document templates as docx. Uses a script to add pages to a new file or first template.
         return "";
     }
 

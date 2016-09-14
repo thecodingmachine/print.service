@@ -1172,26 +1172,8 @@ return $driver;
     array (
       0 => 
       array (
-        'value' => 'rootUrlJsFile',
+        'value' => NULL,
         'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-    ),
-  ),
-  'rootUrlJsFile' => 
-  array (
-    'class' => 'Mouf\\Html\\HtmlElement\\HtmlFromFile',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 'vendor/mouf/html.utils.weblibrarymanager/javascript/rootUrl.php',
-        'parametertype' => 'primitive',
         'type' => 'string',
         'metadata' => 
         array (
@@ -1454,6 +1436,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getApiController_v1() {
 	 	return MoufManager::getMoufManager()->get('ApiController_v1');
+	 }
+
+	/**
+	 * @return Api\v1\Services\DocumentTemplateService
+	 */
+	 public static function getDocumentTemplateService_v1() {
+	 	return MoufManager::getMoufManager()->get('DocumentTemplateService_v1');
 	 }
 
 	/**
@@ -1737,13 +1726,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
-	 * @return Mouf\Html\HtmlElement\HtmlFromFile
-	 */
-	 public static function getRootUrlJsFile() {
-	 	return MoufManager::getMoufManager()->get('rootUrlJsFile');
-	 }
-
-	/**
 	 * @return Mouf\Utils\Session\SessionManager\DefaultSessionManager
 	 */
 	 public static function getSessionManager() {
@@ -1797,13 +1779,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getWhoopsMiddleware() {
 	 	return MoufManager::getMoufManager()->get('whoopsMiddleware');
-	 }
-
-	/**
-	 * @return Api\v1\Services\DocumentTemplateService
-	 */
-	 public static function getDocumentTemplateService_v1() {
-	 	return MoufManager::getMoufManager()->get('DocumentTemplateService_v1');
 	 }
 
 }

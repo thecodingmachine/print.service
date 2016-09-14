@@ -9,8 +9,7 @@ ADD ext-xdebug.ini /usr/local/etc/php/conf.d/ext-xdebug.ini
 RUN apt-get update && \
     apt-get install -y zlib1g-dev # dependency for php zip extension
 
-RUN docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install zip
+RUN docker-php-ext-install zip
 
 # enables Apache's rewrite module
 RUN a2enmod rewrite
@@ -18,5 +17,24 @@ RUN a2enmod rewrite
 # s6-overlay
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.11.0.1/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
+
+# installs nodejs and npm
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    ln -s /usr/bin/nodejs /usr/local/bin/node && \
+    ln -s /usr/bin/npm /usr/local/bin/npm
+
+# installs wkhtmltopdf
+RUN apt-get update && \
+    apt-get install -y wkhtmltopdf
+
+# installs  pdftk
+RUN apt-get update && \
+    apt-get install -y pdftk
+
+# installs libreoffice
+RUN apt-get update && \
+    apt-get install -y libreoffice
 
 ENTRYPOINT ["/init"]

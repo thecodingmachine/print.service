@@ -1,3 +1,5 @@
 #!/usr/bin/with-contenv sh
 
+cd /var/www/html;
+npm install;
 exec /usr/sbin/apachectl -DFOREGROUND;
