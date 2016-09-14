@@ -75,7 +75,7 @@ class ApiController
     {
         // TODO basic auth
         try {
-            $prepared = $this->requestParserService->prepare($request, true);
+            $prepared = $this->requestParserService->prepare($request);
             $documentTemplates = $this->requestParserService->parse($prepared, true);
             $this->documentTemplateService->downloadTemplates($documentTemplates);
             $this->documentTemplateService->populate($documentTemplates);

@@ -5,9 +5,9 @@ use Api\v1\Enumerations\ContentTypeEnumeration;
 use Api\v1\Exceptions\BadRequestException;
 use Api\v1\Exceptions\ForbiddenException;
 use Api\v1\Exceptions\MediaTypeException;
-use Api\v1\Models\Impl\DocxDocumentTemplate;
-use Api\v1\Models\Impl\HtmlDocumentTemplate;
-use Api\v1\Models\Impl\PdfDocumentTemplate;
+use Api\v1\Models\DocxDocumentTemplate;
+use Api\v1\Models\HtmlDocumentTemplate;
+use Api\v1\Models\PdfDocumentTemplate;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -28,13 +28,12 @@ class RequestParserService
      * Primary check of a request.
      *
      * @param ServerRequestInterface $request
-     * @param bool $isMerge
      * @return array
      * @throws BadRequestException
      * @throws MediaTypeException
      * @throws ForbiddenException
      */
-    public function prepare(ServerRequestInterface $request, bool $isMerge = false): array
+    public function prepare(ServerRequestInterface $request): array
     {
         $accept = $request->getHeaderLine("Accept");
 
@@ -44,12 +43,8 @@ class RequestParserService
 
         $body = $request->getParsedBody();
 
-        if (empty($body)) {
+        if (empty($body) || !is_array($body)) {
             throw new BadRequestException();
-        }
-
-        if ((!$isMerge && is_array($body)) || ($isMerge && !is_array($body))) {
-            throw new ForbiddenException();
         }
 
         return [

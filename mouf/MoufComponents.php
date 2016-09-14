@@ -20,6 +20,24 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => 'A random string. It should be different for any application deployed.',
   ),
+  'PDFTK_PATH' => 
+  array (
+    'defaultValue' => '/usr/local/bin/pdftk',
+    'type' => 'string',
+    'comment' => '',
+  ),
+  'WKHTMLTOPDF_PATH' => 
+  array (
+    'defaultValue' => '/usr/local/bin/wkhtmltopdf',
+    'type' => 'string',
+    'comment' => '',
+  ),
+  'LIBREOFFICE_PATH' => 
+  array (
+    'defaultValue' => '/usr/local/bin/soffice',
+    'type' => 'string',
+    'comment' => '',
+  ),
 ));
 
 $moufManager->setAllVariables(array (
@@ -60,6 +78,18 @@ $moufManager->addComponentInstances(array (
     'class' => 'Api\\v1\\Services\\DocumentTemplateService',
     'external' => false,
     'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'twigEnvironment',
+        'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
   ),
   'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController' => 
   array (
@@ -376,11 +406,12 @@ $moufManager->addComponentInstances(array (
       array (
         'value' => 
         array (
-          0 => '__anonymous__2e32_1193726777',
-          1 => '__anonymous__2e32_1168295569',
-          2 => '__anonymous__2e32_1083046185',
-          3 => '__anonymous__2e32_1984332620',
-          4 => '__anonymous__2e32_1122304490',
+          0 => '__anonymous__2e32_766222_1473858447177',
+          1 => '__anonymous__2e32_1193726777',
+          2 => '__anonymous__2e32_1168295569',
+          3 => '__anonymous__2e32_1083046185',
+          4 => '__anonymous__2e32_1984332620',
+          5 => '__anonymous__2e32_1122304490',
         ),
         'parametertype' => 'object',
         'type' => 'string',
@@ -547,6 +578,25 @@ $moufManager->addComponentInstances(array (
       ),
     ),
   ),
+  '__anonymous__2e32_766222_1473858447177' => 
+  array (
+    'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
+    'external' => false,
+    'weak' => true,
+    'anonymous' => true,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'return $container->get(\'payloadMiddleware\');',
+        'parametertype' => 'primitive',
+        'type' => 'php',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
   'annotationReader' => 
   array (
     'weak' => false,
@@ -677,74 +727,8 @@ return new \\Doctrine\\Common\\Annotations\\CachedReader($reader, $container->ge
       'setRight' => 'block.right',
       'setHeader' => 'block.header',
       'setFooter' => 'block.footer',
-      'setWebLibraryManager' => 'defaultWebLibraryManager',
       'setTemplateRenderer' => 'bootstrapRenderer',
       'setDefaultRenderer' => 'defaultRenderer',
-    ),
-  ),
-  'component.bootstrap' => 
-  array (
-    'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 
-        array (
-          0 => 'vendor/components/bootstrap/js/bootstrap.js',
-        ),
-        'parametertype' => 'primitive',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      1 => 
-      array (
-        'value' => 
-        array (
-          0 => 'vendor/components/bootstrap/css/bootstrap.min.css',
-        ),
-        'parametertype' => 'primitive',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-    ),
-  ),
-  'component.jquery' => 
-  array (
-    'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 
-        array (
-          0 => 'vendor/components/jquery/jquery.js',
-        ),
-        'parametertype' => 'primitive',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      1 => 
-      array (
-        'value' => 
-        array (
-        ),
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
     ),
   ),
   'customRenderer' => 
@@ -852,9 +836,6 @@ return $driver;
       'setWebLibraries' => 
       array (
         0 => 'rootUrlInlineWebLibrary',
-        1 => 'messageServiceLibrary',
-        2 => 'component.jquery',
-        3 => 'component.bootstrap',
       ),
     ),
     'constructor' => 
@@ -907,38 +888,6 @@ return $driver;
       array (
         'value' => 'SECRET',
         'type' => 'config',
-        'metadata' => 
-        array (
-        ),
-      ),
-    ),
-  ),
-  'messageServiceLibrary' => 
-  array (
-    'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 
-        array (
-        ),
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      1 => 
-      array (
-        'value' => 
-        array (
-          0 => 'vendor/mouf/html.widgets.messageservice/messages.css',
-        ),
-        'parametertype' => 'primitive',
-        'type' => 'string',
         'metadata' => 
         array (
         ),
@@ -1135,6 +1084,12 @@ return $driver;
       ),
     ),
   ),
+  'payloadMiddleware' => 
+  array (
+    'class' => 'Psr7Middlewares\\Middleware\\Payload',
+    'external' => false,
+    'weak' => false,
+  ),
   'psr.errorLogLogger' => 
   array (
     'class' => 'Mouf\\Utils\\Log\\Psr\\ErrorLogLogger',
@@ -1172,8 +1127,26 @@ return $driver;
     array (
       0 => 
       array (
-        'value' => NULL,
+        'value' => 'rootUrlJsFile',
         'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  'rootUrlJsFile' => 
+  array (
+    'class' => 'Mouf\\Html\\HtmlElement\\HtmlFromFile',
+    'external' => false,
+    'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'vendor/mouf/html.utils.weblibrarymanager/javascript/rootUrl.php',
+        'parametertype' => 'primitive',
         'type' => 'string',
         'metadata' => 
         array (
@@ -1345,6 +1318,13 @@ class Mouf {
 				'constructor' => [
 					0 => function(ContainerInterface $container) {
 						return $container->get('whoopsMiddleware');
+					},
+				],
+			],
+			'__anonymous__2e32_766222_1473858447177' => [
+				'constructor' => [
+					0 => function(ContainerInterface $container) {
+						return $container->get('payloadMiddleware');
 					},
 				],
 			],
@@ -1607,20 +1587,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
-	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
-	 */
-	 public static function getComponent_bootstrap() {
-	 	return MoufManager::getMoufManager()->get('component.bootstrap');
-	 }
-
-	/**
-	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
-	 */
-	 public static function getComponent_jquery() {
-	 	return MoufManager::getMoufManager()->get('component.jquery');
-	 }
-
-	/**
 	 * @return Mouf\Html\Renderer\FileBasedRenderer
 	 */
 	 public static function getCustomRenderer() {
@@ -1663,13 +1629,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
-	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
-	 */
-	 public static function getMessageServiceLibrary() {
-	 	return MoufManager::getMoufManager()->get('messageServiceLibrary');
-	 }
-
-	/**
 	 * @return Mouf\Html\Widgets\MessageService\Widget\MessageWidget
 	 */
 	 public static function getMessageWidget() {
@@ -1705,6 +1664,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
+	 * @return Psr7Middlewares\Middleware\Payload
+	 */
+	 public static function getPayloadMiddleware() {
+	 	return MoufManager::getMoufManager()->get('payloadMiddleware');
+	 }
+
+	/**
 	 * @return Mouf\Utils\Log\Psr\ErrorLogLogger
 	 */
 	 public static function getPsr_errorLogLogger() {
@@ -1723,6 +1689,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getRootUrlInlineWebLibrary() {
 	 	return MoufManager::getMoufManager()->get('rootUrlInlineWebLibrary');
+	 }
+
+	/**
+	 * @return Mouf\Html\HtmlElement\HtmlFromFile
+	 */
+	 public static function getRootUrlJsFile() {
+	 	return MoufManager::getMoufManager()->get('rootUrlJsFile');
 	 }
 
 	/**

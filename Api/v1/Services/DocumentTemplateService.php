@@ -5,11 +5,14 @@ use Api\v1\Enumerations\ContentTypeEnumeration;
 use Api\v1\Exceptions\NotFoundException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Models\AbstractDocumentTemplate;
-use Api\v1\Models\Impl\DocxDocumentTemplate;
-use Api\v1\Models\Impl\HtmlDocumentTemplate;
+use Api\v1\Models\DocxDocumentTemplate;
+use Api\v1\Models\HtmlDocumentTemplate;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
+use Mouf\Html\Renderer\Twig\TwigTemplate;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 /**
  * Class DocumentTemplateService
@@ -19,10 +22,17 @@ class DocumentTemplateService
 {
 
     /**
-     * DocumentTemplateService constructor.
+     * @var \Twig_Environment
      */
-    public function __construct()
+    private $twigEnvironment;
+
+    /**
+     * DocumentTemplateService constructor.
+     * @param \Twig_Environment $twigEnvironment
+     */
+    public function __construct(\Twig_Environment $twigEnvironment)
     {
+        $this->twigEnvironment = $twigEnvironment;
     }
 
     /**
@@ -42,17 +52,17 @@ class DocumentTemplateService
                 /** @var HtmlDocumentTemplate $documentTemplate */
                 if (!empty($documentTemplate->getHeaderUrl())) {
                     $headerLocalPath = $this->downloadTemplate($documentTemplate->getHeaderUrl(), $contentType);
-                    $documentTemplate->setHeaderLocalPath($headerLocalPath);
+                    $documentTemplate->setHeaderTemplateLocalPath($headerLocalPath);
                 }
 
                 if (!empty($documentTemplate->getFooterUrl())) {
                     $footerLocalPath = $this->downloadTemplate($documentTemplate->getFooterUrl(), $contentType);
-                    $documentTemplate->setFooterLocalPath($footerLocalPath);
+                    $documentTemplate->setFooterTemplateLocalPath($footerLocalPath);
                 }
             }
 
             $localPath = $this->downloadTemplate($documentTemplate->getUrl(), $contentType);
-            $documentTemplate->setLocalPath($localPath);
+            $documentTemplate->setTemplateLocalPath($localPath);
         }
     }
 
@@ -61,24 +71,30 @@ class DocumentTemplateService
      *
      * @param array $documentTemplates
      * @throws UnprocessableEntityException
+     * @throws \Exception
      */
     public function populate(array $documentTemplates)
     {
-        /** @var AbstractDocumentTemplate $documentTemplate */
-        foreach ($documentTemplates as $documentTemplate) {
-            $contentType = $documentTemplate->getContentType();
+        try {
+            /** @var AbstractDocumentTemplate $documentTemplate */
+            foreach ($documentTemplates as $documentTemplate) {
+                $contentType = $documentTemplate->getContentType();
 
-            switch ($contentType) {
-                case ContentTypeEnumeration::HTML:
-                    /** @var HtmlDocumentTemplate $documentTemplate */
-                    $this->populateHtmlDocumentTemplate($documentTemplate);
-                    break;
-                case ContentTypeEnumeration::DOCX:
-                    /** @var DocxDocumentTemplate $documentTemplate */
-                    $this->populateDocxDocumentTemplate($documentTemplate);
-                    break;
+                switch ($contentType) {
+                    case ContentTypeEnumeration::HTML:
+                        /** @var HtmlDocumentTemplate $documentTemplate */
+                        $this->populateHtmlDocumentTemplate($documentTemplate);
+                        break;
+                    case ContentTypeEnumeration::DOCX:
+                        /** @var DocxDocumentTemplate $documentTemplate */
+                        $this->populateDocxDocumentTemplate($documentTemplate);
+                        break;
+                }
+
             }
-
+        } catch (UnprocessableEntityException $e) {
+            $this->removeTemporaryGeneratedFiles($documentTemplates);
+            throw $e;
         }
     }
 
@@ -130,13 +146,14 @@ class DocumentTemplateService
 
         try {
             // TODO: checks if template not updated.
-            $templatePath = ROOT_PATH . "tmp/" . $this->generateRandomName() . $fileExtension;
+            $templatePath = ROOT_PATH . "tmp/template_" . $this->generateRandomName() . $fileExtension;
             $template = fopen($templatePath, "w");
             $stream = \GuzzleHttp\Psr7\stream_for($template);
             $client = new Client();
             $client->request("GET", $url, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
 
             return $templatePath;
+
         } catch (RequestException $e) {
 
             if ($e->getCode() == 404) {
@@ -148,16 +165,6 @@ class DocumentTemplateService
     }
 
     /**
-     * Generates a random template name.
-     *
-     * @return string
-     */
-    private function generateRandomName(): string
-    {
-        return substr(str_shuffle(str_repeat($x="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", ceil(5/strlen($x)))), 1, 5) . time();
-    }
-
-    /**
      * Populates a Html document template.
      *
      * @param HtmlDocumentTemplate $template
@@ -165,7 +172,41 @@ class DocumentTemplateService
      */
     private function populateHtmlDocumentTemplate(HtmlDocumentTemplate $template)
     {
-        // TODO: populates html document template using twig.
+        try {
+            // creates the body
+            $templateLocalPath = $template->getTemplateLocalPath();
+            $twigBodyTemplate = new TwigTemplate($this->twigEnvironment, $templateLocalPath, $template->getData());
+            $populatedTemplateLocalPath = ROOT_PATH . "tmp/" . $this->generateRandomName() . ".html";
+            $populatedBodyHtmlFile = new \SplFileObject($populatedTemplateLocalPath, "w");
+            $populatedBodyHtmlFile->fwrite($twigBodyTemplate->getHtml());
+            $template->setPopulatedTemplateLocalPath($populatedTemplateLocalPath);
+
+            // creates header if exists
+            $headerTemplateLocalPath = $template->getHeaderTemplateLocalPath();
+
+            if (!empty($headerTemplateLocalPath)) {
+                $twigHeaderTemplate = new TwigTemplate($this->twigEnvironment, $headerTemplateLocalPath, $template->getData());
+                $populatedHeaderTemplateLocalPath = ROOT_PATH . "tmp/" . $this->generateRandomName() . ".html";
+                $populatedHeaderHtmlFile = new \SplFileObject($populatedHeaderTemplateLocalPath, "w");
+                $populatedHeaderHtmlFile->fwrite($twigHeaderTemplate->getHtml());
+                $template->setPopulatedHeaderTemplateLocalPath($populatedHeaderTemplateLocalPath);
+            }
+
+            // creates footer if exists
+            $footerTemplateLocalPath = $template->getFooterTemplateLocalPath();
+
+            if (!empty($footerTemplateLocalPath)) {
+                $twigFooterTemplate = new TwigTemplate($this->twigEnvironment, $footerTemplateLocalPath, $template->getData());
+                $populatedFooterTemplateLocalPath = ROOT_PATH . "tmp/" . $this->generateRandomName() . ".html";
+                $populatedFooterHtmlFile = new \SplFileObject($populatedFooterTemplateLocalPath, "w");
+                $populatedFooterHtmlFile->fwrite($twigFooterTemplate->getHtml());
+                $template->setPopulatedFooterTemplateLocalPath($populatedFooterTemplateLocalPath);
+
+            }
+
+        } catch (\Exception $e) {
+            throw new UnprocessableEntityException();
+        }
     }
 
     /**
@@ -188,8 +229,80 @@ class DocumentTemplateService
      */
     private function mergeAsPdf(array $documentTemplates): string
     {
-        // TODO: merge all document templates as PDF. For Hmtl, use pdftkhtml2pdf, for Docx use libreoffice to convert to PDF. Then use PDFTK for the merge itself.
-        return "";
+        $pdfFilesPaths = [];
+        $finalDocumentPath = ROOT_PATH . "tmp/" . $this->generateRandomName() . ".pdf";
+
+        // first, converts document's templates according to their content types
+        /** @var AbstractDocumentTemplate $documentTemplate */
+        foreach ($documentTemplates as $documentTemplate) {
+            $contentType = $documentTemplate->getContentType();
+
+            switch ($contentType) {
+                case ContentTypeEnumeration::HTML:
+                    $convertedDocumentTemplatePath =  ROOT_PATH . "tmp/" . $this->generateRandomName() . ".pdf";
+                    $wkhtmltopdfCommand = WKHTMLTOPDF_PATH . " ";
+
+                    /** @var HtmlDocumentTemplate $documentTemplate */
+                    if (!empty($documentTemplate->getPopulatedHeaderTemplateLocalPath())) {
+                        $wkhtmltopdfCommand .= "--header-html " . $documentTemplate->getPopulatedHeaderTemplateLocalPath() . " --header-spacing 3 ";
+                    }
+
+                    if (!empty($documentTemplate->getPopulatedFooterTemplateLocalPath())) {
+                        $wkhtmltopdfCommand .= "--footer-html " . $documentTemplate->getPopulatedFooterTemplateLocalPath() . " --margin-bottm 15mm --footer-spacing -3 ";
+                    }
+
+                    $wkhtmltopdfCommand .= $documentTemplate->getPopulatedTemplateLocalPath() . " " . $convertedDocumentTemplatePath;
+
+                    $process = new Process();
+                    $process->run($wkhtmltopdfCommand);
+
+                    if (!$process->isSuccessful()) {
+                        $this->removeTemporaryGeneratedFiles($documentTemplates, $pdfFilesPaths);
+                        throw new \Exception("Une erreur est survenue lors de la conversion d'un fichier HTML au format PDF", 500);
+                    }
+
+                    $pdfFilesPaths[] = $convertedDocumentTemplatePath;
+
+                    break;
+                case ContentTypeEnumeration::DOCX:
+                    $convertedDocumentTemplatePath =  ROOT_PATH . "tmp/" . $this->generateRandomName() . ".pdf";
+                    $wkhtmltopdfCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $documentTemplate->getPopulatedTemplateLocalPath() . ' --writer -outdir "' . ROOT_PATH . 'tmp"';
+
+                    $process = new Process();
+                    $process->run($wkhtmltopdfCommand);
+
+                    if (!$process->isSuccessful()) {
+                        $this->removeTemporaryGeneratedFiles($documentTemplates, $pdfFilesPaths);
+                        throw new \Exception("Une erreur est survenue lors de la conversion d'un fichier Word au format PDF", 500);
+                    }
+
+                    $pdfFilesPaths[] = $convertedDocumentTemplatePath;
+                    break;
+                default:
+                    // case PDF, no need to convert (captain obvious)
+                    $pdfFilesPaths[] = $documentTemplate->getTemplateLocalPath();
+            }
+        }
+
+        // then merges all PDF width PDFtk
+        $pdftkCommand = PDFTK_PATH . " ";
+
+        /** @var string $pdfFilePath */
+        foreach ($pdfFilesPaths as $pdfFilePath) {
+            $pdftkCommand .= $pdfFilePath . " ";
+        }
+
+        $pdftkCommand .= "cat output " . $finalDocumentPath;
+
+        $process = new Process();
+        $process->run($pdftkCommand);
+
+        if (!$process->isSuccessful()) {
+            $this->removeTemporaryGeneratedFiles($documentTemplates, $pdfFilesPaths);
+            throw new \Exception("Une erreur est survenue lors de la fusion des documents PDF", 500);
+        }
+
+        return $finalDocumentPath;
     }
 
     /**
@@ -216,6 +329,73 @@ class DocumentTemplateService
     {
         // TODO: merge all document templates as docx. Uses a script to add pages to a new file or first template.
         return "";
+    }
+
+    /**
+     * Removes the temporary generated files (but not the templates).
+     *
+     * @param array $documentTemplates
+     * @param array|null $pdfFilesPaths
+     * @throws \Exception
+     */
+    private function removeTemporaryGeneratedFiles(array $documentTemplates, array $pdfFilesPaths = null)
+    {
+        $fileSystem = new Filesystem();
+        $filesToRemovePaths = [];
+
+        /** @var AbstractDocumentTemplate $documentTemplate */
+        foreach ($documentTemplates as $documentTemplate) {
+            $contentType = $documentTemplate->getContentType();
+
+            switch ($contentType) {
+                case ContentTypeEnumeration::PDF:
+
+                    // removes the pdf template from the files to delete
+                    if (!empty($pdfFilesPaths) && in_array($documentTemplate->getTemplateLocalPath(), $pdfFilesPaths)) {
+                        array_splice($pdfFilesPaths, array_search($documentTemplate->getTemplateLocalPath(), $pdfFilesPaths), 1);
+                    }
+
+                    break;
+                case ContentTypeEnumeration::HTML:
+
+                    if (!empty($documentTemplate->getPopulatedTemplateLocalPath())) {
+                        $filesToRemovePaths[] = $documentTemplate->getPopulatedTemplateLocalPath();
+                    }
+
+                    /** @var HtmlDocumentTemplate $documentTemplate */
+                    if (!empty($documentTemplate->getPopulatedHeaderTemplateLocalPath())) {
+                        $filesToRemovePaths[] = $documentTemplate->getPopulatedHeaderTemplateLocalPath();
+                    }
+
+                    if (!empty($documentTemplate->getPopulatedFooterTemplateLocalPath())) {
+                        $filesToRemovePaths[] = $documentTemplate->getPopulatedFooterTemplateLocalPath();
+                    }
+
+                    break;
+                default:
+                    // case Word document (.docx)
+                    if (!empty($documentTemplate->getPopulatedTemplateLocalPath())) {
+                        $filesToRemovePaths[] = $documentTemplate->getPopulatedTemplateLocalPath();
+                    }
+
+            }
+        }
+
+        if (!empty($pdfFilesPaths)) {
+            $filesToRemovePaths = array_merge($filesToRemovePaths, $pdfFilesPaths);
+        }
+
+        $fileSystem->remove($filesToRemovePaths);
+    }
+
+    /**
+     * Generates a random template name.
+     *
+     * @return string
+     */
+    private function generateRandomName(): string
+    {
+        return substr(str_shuffle(str_repeat($x="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", ceil(5/strlen($x)))), 1, 5) . "_dt_" . time();
     }
 
 }

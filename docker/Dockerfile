@@ -35,6 +35,7 @@ RUN apt-get update && \
 
 # installs libreoffice
 RUN apt-get update && \
-    apt-get install -y libreoffice
+    apt-get install -y libreoffice && \
+    ln -s /usr/bin/soffice /usr/local/bin/soffice
 
 ENTRYPOINT ["/init"]

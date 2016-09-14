@@ -26,9 +26,12 @@ abstract class AbstractDocumentTemplate
     /**
      * @var string
      */
-    protected $localPath;
+    protected $templateLocalPath;
 
-    // TODO: add var $resultPath
+    /**
+     * @var string
+     */
+    protected $populatedTemplateLocalPath;
     
     /**
      * AbstractDocumentTemplate constructor.
@@ -41,7 +44,8 @@ abstract class AbstractDocumentTemplate
         $this->url = $url;
         $this->contentType = $contentType;
         $this->data = $data;
-        $this->localPath = null;
+        $this->templateLocalPath = null;
+        $this->populatedTemplateLocalPath = null;
     }
 
     /**
@@ -71,17 +75,33 @@ abstract class AbstractDocumentTemplate
     /**
      * @return string
      */
-    public function getLocalPath(): string
+    public function getTemplateLocalPath(): string
     {
-        return $this->localPath;
+        return $this->templateLocalPath;
     }
 
     /**
-     * @param string $localPath
+     * @param string $templateLocalPath
      */
-    public function setLocalPath(string $localPath)
+    public function setTemplateLocalPath(string $templateLocalPath)
     {
-        $this->localPath = $localPath;
+        $this->templateLocalPath = $templateLocalPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPopulatedTemplateLocalPath(): string
+    {
+        return $this->populatedTemplateLocalPath;
+    }
+
+    /**
+     * @param string $populatedTemplateLocalPath
+     */
+    public function setPopulatedTemplateLocalPath(string $populatedTemplateLocalPath)
+    {
+        $this->populatedTemplateLocalPath = $populatedTemplateLocalPath;
     }
 
 }

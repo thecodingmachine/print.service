@@ -1,12 +1,11 @@
 <?php
-namespace Api\v1\Models\Impl;
+namespace Api\v1\Models;
 
 use Api\v1\Enumerations\ContentTypeEnumeration;
-use Api\v1\Models\AbstractDocumentTemplate;
 
 /**
  * Class PdfDocumentTemplate
- * @package Api\v1\Models\Impl
+ * @package Api\v1\Models
  */
 class PdfDocumentTemplate extends AbstractDocumentTemplate
 {
