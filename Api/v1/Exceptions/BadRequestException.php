@@ -14,7 +14,7 @@ class BadRequestException extends \Exception
     public function __construct()
     {
         $this->code = 400;
-        $this->message = "Bad Request: requête malformée, contenu non parsable";
+        $this->message = "Bad request exception: malformed request.";
     }
 
 }

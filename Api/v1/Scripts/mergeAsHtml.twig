@@ -1,6 +1,6 @@
 {% for htmlDocumentTemplate in htmlDocumentsTemplates %}
 
-        {% if htmlDocumentTemplate.populatedHeaderTemplatePath != null %}
+        {% if htmlDocumentTemplate.populatedHeaderTemplatePath is not null %}
 
             {% include htmlDocumentTemplate.populatedHeaderTemplatePath %}
 
@@ -8,7 +8,7 @@
 
         {% include htmlDocumentTemplate.populatedTemplatePath %}
 
-        {% if htmlDocumentTemplate.populatedFooterTemplatePath != null %}
+        {% if htmlDocumentTemplate.populatedFooterTemplatePath is not null %}
 
             {% include htmlDocumentTemplate.populatedFooterTemplatePath %}
 

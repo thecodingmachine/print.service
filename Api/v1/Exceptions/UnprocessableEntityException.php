@@ -1,4 +1,5 @@
 <?php
+
 namespace Api\v1\Exceptions;
 
 /**
@@ -10,11 +11,12 @@ class UnprocessableEntityException extends \Exception
 
     /**
      * UnprocessableEntityException constructor.
+     * @param string $details
      */
-    public function __construct()
+    public function __construct(string $details)
     {
         $this->code = 422;
-        $this->message = "Unprocessable Entity: objet de données `data` passé dans la requête impossible à traiter dans le template.";
+        $this->message = "Object 'data' of the document seems not to match with tags of the template. Details: $details";
     }
 
 }

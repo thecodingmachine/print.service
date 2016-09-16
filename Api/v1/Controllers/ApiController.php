@@ -1,8 +1,8 @@
 <?php
 namespace Api\v1\Controllers;
 
-use Api\v1\Services\DocumentTemplateService;
-use Api\v1\Services\RequestParserService;
+use Api\v1\Models\DocumentsHandler;
+use Api\v1\Services\FileService;
 use Mouf\Mvc\Splash\Annotations\Post;
 use Mouf\Mvc\Splash\Annotations\URL;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,24 +16,17 @@ class ApiController
 {
 
     /**
-     * @var RequestParserService
+     * @var FileService
      */
-    private $requestParserService;
-
-    /**
-     * @var DocumentTemplateService
-     */
-    private $documentTemplateService;
+    private $fileService;
 
     /**
      * ApiController constructor.
-     * @param RequestParserService $requestParserService
-     * @param DocumentTemplateService $documentTemplateService
+     * @param FileService $fileService
      */
-    public function __construct(RequestParserService $requestParserService, DocumentTemplateService $documentTemplateService)
+    public function __construct(FileService $fileService)
     {
-        $this->requestParserService = $requestParserService;
-        $this->documentTemplateService = $documentTemplateService;
+        $this->fileService = $fileService;
     }
 
     /**
@@ -46,15 +39,14 @@ class ApiController
     {
         // TODO basic auth
         try {
-            $prepared = $this->requestParserService->prepare($request);
-            $documentTemplates = $this->requestParserService->parse($prepared);
-            $this->documentTemplateService->downloadTemplates($documentTemplates);
-            $this->documentTemplateService->populate($documentTemplates);
-            $finalDocumentPath = $this->documentTemplateService->merge($documentTemplates, $prepared["accept"]);
+            $accept = $request->getHeaderLine("Accept");
+            $postData = $request->getParsedBody();
+            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
+            $documentsHandler->generate();
 
             // TODO return final document.
 
-            return new JsonResponse([ "message" => $finalDocumentPath ]);
+            return new JsonResponse([ "message" => $documentsHandler->getFinalDocument() ]);
 
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
@@ -75,15 +67,14 @@ class ApiController
     {
         // TODO basic auth
         try {
-            $prepared = $this->requestParserService->prepare($request);
-            $documentTemplates = $this->requestParserService->parse($prepared, true);
-            $this->documentTemplateService->downloadTemplates($documentTemplates);
-            $this->documentTemplateService->populate($documentTemplates);
-            $finalDocumentPath = $this->documentTemplateService->merge($documentTemplates, $prepared["accept"]);
+            $accept = $request->getHeaderLine("Accept");
+            $postData = $request->getParsedBody();
+            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
+            $documentsHandler->generate();
 
             // TODO return final document.
 
-            return new JsonResponse([ "message" => $finalDocumentPath ]);
+            return new JsonResponse([ "message" => $documentsHandler->getFinalDocument() ]);
 
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([

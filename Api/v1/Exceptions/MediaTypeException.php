@@ -14,7 +14,7 @@ class MediaTypeException extends \Exception
     public function __construct()
     {
         $this->code = 415;
-        $this->message = "Media Type non supporté: format de sortie et d'entrée incompatibles. Par exemple: template d'entrée au format html (Twig) et sortie demandée en Docx.";
+        $this->message = "Media type exception: the 'Accept' header value is not supported or does not match with the content types of the templates.";
     }
 
 }

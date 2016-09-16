@@ -38,6 +38,12 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => '',
   ),
+  'TEMPORARY_FILES_FOLDER' => 
+  array (
+    'defaultValue' => 'tmp/',
+    'type' => 'string',
+    'comment' => '',
+  ),
 ));
 
 $moufManager->setAllVariables(array (
@@ -55,34 +61,7 @@ $moufManager->addComponentInstances(array (
     array (
       0 => 
       array (
-        'value' => 'RequestParserService_v1',
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-      1 => 
-      array (
-        'value' => 'DocumentTemplateService_v1',
-        'parametertype' => 'object',
-        'type' => 'string',
-        'metadata' => 
-        array (
-        ),
-      ),
-    ),
-  ),
-  'DocumentTemplateService_v1' => 
-  array (
-    'class' => 'Api\\v1\\Services\\DocumentTemplateService',
-    'external' => false,
-    'weak' => false,
-    'constructor' => 
-    array (
-      0 => 
-      array (
-        'value' => 'twigEnvironment',
+        'value' => 'fileService_v1',
         'parametertype' => 'object',
         'type' => 'string',
         'metadata' => 
@@ -420,12 +399,6 @@ $moufManager->addComponentInstances(array (
         ),
       ),
     ),
-  ),
-  'RequestParserService_v1' => 
-  array (
-    'class' => 'Api\\v1\\Services\\RequestParserService',
-    'external' => false,
-    'weak' => false,
   ),
   '__anonymous__2e32_1078724055' => 
   array (
@@ -888,6 +861,24 @@ return $driver;
       array (
         'value' => 'SECRET',
         'type' => 'config',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  'fileService_v1' => 
+  array (
+    'class' => 'Api\\v1\\Services\\FileService',
+    'external' => false,
+    'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'twigEnvironment',
+        'parametertype' => 'object',
+        'type' => 'string',
         'metadata' => 
         array (
         ),
@@ -1419,13 +1410,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
-	 * @return Api\v1\Services\DocumentTemplateService
-	 */
-	 public static function getDocumentTemplateService_v1() {
-	 	return MoufManager::getMoufManager()->get('DocumentTemplateService_v1');
-	 }
-
-	/**
 	 * @return Mouf\Mvc\Splash\Controllers\HttpErrorsController
 	 */
 	 public static function getMoufMvcSplashControllersHttpErrorsController() {
@@ -1514,13 +1498,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getMoufMvcSplashSplashMiddleware() {
 	 	return MoufManager::getMoufManager()->get('Mouf\\Mvc\\Splash\\SplashMiddleware');
-	 }
-
-	/**
-	 * @return Api\v1\Services\RequestParserService
-	 */
-	 public static function getRequestParserService_v1() {
-	 	return MoufManager::getMoufManager()->get('RequestParserService_v1');
 	 }
 
 	/**
@@ -1626,6 +1603,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getFileCacheService() {
 	 	return MoufManager::getMoufManager()->get('fileCacheService');
+	 }
+
+	/**
+	 * @return Api\v1\Services\FileService
+	 */
+	 public static function getFileService_v1() {
+	 	return MoufManager::getMoufManager()->get('fileService_v1');
 	 }
 
 	/**
