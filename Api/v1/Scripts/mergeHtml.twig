@@ -1,0 +1,17 @@
+{% for htmlTemplate in htmlTemplates %}
+
+        {% if htmlTemplate["header"] is not null %}
+
+            {% include htmlTemplate["header"].getRealPath() %}
+
+        {% endif %}
+
+        {% include htmlTemplate["body"].getRealPath() %}
+
+        {% if htmlTemplate["footer"] is not null %}
+
+            {% include htmlTemplate["footer"].getRealPath() %}
+
+        {% endif %}
+
+{% endfor %}

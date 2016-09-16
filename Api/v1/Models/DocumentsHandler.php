@@ -4,7 +4,10 @@ namespace Api\v1\Models;
 use Api\v1\Exceptions\BadRequestException;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\MediaTypeException;
+use Api\v1\Exceptions\MergingHtmlException;
 use Api\v1\Exceptions\MergingPdfException;
+use Api\v1\Exceptions\MergingWordDocumentException;
+use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Services\FileService;
 
 /**
@@ -71,6 +74,11 @@ class DocumentsHandler
         }
     }
 
+    function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+    }
+
     /**
      * Parses a single document data.
      * @param array $documentData
@@ -131,6 +139,15 @@ class DocumentsHandler
         return $document;
     }
 
+    /**
+     * Generates the final document.
+     * @throws MediaTypeException
+     * @throws UnprocessableEntityException
+     * @throws MergingHtmlException
+     * @throws MergingWordDocumentException
+     * @throws MergingPdfException
+     * @throws \Exception
+     */
     public function generate()
     {
         /** @var Document $currentDocument */
@@ -154,14 +171,50 @@ class DocumentsHandler
         }
     }
 
+    /**
+     * Merges HTML files.
+     * @throws MergingHtmlException
+     */
     private function mergeAsHtml()
     {
-        // TODO
+        $htmlFilesToMerge = [];
+
+        /** @var Document $currentDocument */
+        foreach ($this->documents as $currentDocument) {
+            $currentTemplates = $currentDocument->getTemplates();
+
+            /** @var HtmlTemplate $currentTemplate */
+            foreach ($currentTemplates as $currentTemplate) {
+                $htmlFilesToMerge[] = [
+                    "header" => $currentTemplate->getPopulatedHeaderTemplate(),
+                    "body" => $currentTemplate->getPopulatedTemplate(),
+                    "footer" => $currentTemplate->getPopulatedFooterTemplate()
+                ];
+            }
+        }
+
+        $this->finalDocument = $this->fileService->mergeHtmlFiles($htmlFilesToMerge, $this->fileService->generateRandomFileName(".html"));
     }
 
+    /**
+     * Merges Word document files.
+     * @throws MergingWordDocumentException
+     */
     private function mergeAsWordDocument()
     {
-        // TODO
+        $wordDocumentsToMerge = [];
+
+        /** @var Document $currentDocument */
+        foreach ($this->documents as $currentDocument) {
+            $currentTemplates = $currentDocument->getTemplates();
+
+            /** @var WordTemplate $currentTemplate */
+            foreach ($currentTemplates as $currentTemplate) {
+                $wordDocumentsToMerge[] = $currentTemplate->getPopulatedTemplate();
+            }
+        }
+
+        $this->finalDocument = $this->fileService->mergeWordDocuments($wordDocumentsToMerge, $this->fileService->generateRandomFileName(".docx"));
     }
 
     /**
@@ -188,7 +241,7 @@ class DocumentsHandler
             }
         }
 
-        $this->finalDocument = $this->fileService->mergePdf($pdfFilesToMerge, $this->fileService->generateRandomFileName() . ".pdf");
+        $this->finalDocument = $this->fileService->mergePdfFiles($pdfFilesToMerge, $this->fileService->generateRandomFileName(".pdf"));
     }
 
     /**

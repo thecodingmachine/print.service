@@ -32,7 +32,7 @@ class WordTemplate extends AbstractTemplateToPopulate
      */
     public function populate(array $data = null)
     {
-        // TODO: Implement populate() method.
+        $this->populatedTemplate = $this->fileService->populateWordDocument($this->template, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
     }
 
     /**
@@ -41,7 +41,7 @@ class WordTemplate extends AbstractTemplateToPopulate
      */
     public function convertToPdf()
     {
-        $this->pdfTemplate = $this->fileService->convertWordDocumentToPDf($this->populatedTemplate, $this->fileService->generateRandomFileName(".pdf"));
+        $this->pdfTemplate = $this->fileService->convertWordDocumentToPdf($this->populatedTemplate, $this->fileService->generateRandomFileName(".pdf"));
     }
 
 }

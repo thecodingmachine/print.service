@@ -2,7 +2,9 @@
 namespace Api\v1\Services;
 
 use Api\v1\Exceptions\HtmlToPdfException;
+use Api\v1\Exceptions\MergingHtmlException;
 use Api\v1\Exceptions\MergingPdfException;
+use Api\v1\Exceptions\MergingWordDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
 use GuzzleHttp\Client;
@@ -78,7 +80,7 @@ class FileService
      * @return \SplFileInfo
      * @throws UnprocessableEntityException
      */
-    public function populateHtml(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
+    public function populateTwigFile(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
     {
         try {
             $twigTemplate = new TwigTemplate($this->twigEnvironment, $file->getRealPath(), $data);
@@ -89,6 +91,18 @@ class FileService
         } catch (\Exception $e) {
             throw new UnprocessableEntityException($e->getMessage());
         }
+    }
+
+    /**
+     * @param \SplFileInfo $file
+     * @param array $data
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws UnprocessableEntityException
+     */
+    public function populateWordDocument(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
+    {
+        // TODO
     }
 
     /**
@@ -113,7 +127,7 @@ class FileService
             $wkhtmltopdfCommand .= "--footer-html " . $footer->getRealPath() . " --margin-bottm 15mm --footer-spacing -3 ";
         }
 
-        $wkhtmltopdfCommand .= $body->getRealPath() . " " . $folderPath . $resultFileName;
+        $wkhtmltopdfCommand .= $body->getRealPath() . " $folderPath $resultFileName";
 
         $process = new Process();
         $process->run($wkhtmltopdfCommand);
@@ -132,7 +146,7 @@ class FileService
      * @return \SplFileInfo
      * @throws WordDocumentToPdfException
      */
-    public function convertWordDocumentToPDf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
+    public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
         $folderPath = $wordDocument->getPathInfo()->getRealPath();
         $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer -outdir "' . $folderPath . $resultFileName . '"';
@@ -154,7 +168,7 @@ class FileService
      * @return \SplFileInfo
      * @throws MergingPdfException
      */
-    public function mergePdf(array $pdfFilesToMerge, string $resultFileName): \SplFileInfo
+    public function mergePdfFiles(array $pdfFilesToMerge, string $resultFileName): \SplFileInfo
     {
         $folderPath = null;
         $pdftkCommand = PDFTK_PATH . " ";
@@ -168,7 +182,7 @@ class FileService
             }
         }
 
-        $pdftkCommand .= "cat output " . $folderPath . $resultFileName;
+        $pdftkCommand .= "cat output $folderPath $resultFileName";
 
         $process = new Process();
         $process->run($pdftkCommand);
@@ -178,6 +192,41 @@ class FileService
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);
+    }
+
+    /**
+     * Merges a list of HTML files.
+     * @param array<array<String, \SplFileInfo>> $htmlFilesToMerge
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws MergingHtmlException
+     */
+    public function mergeHtmlFiles(array $htmlFilesToMerge, string $resultFileName): \SplFileInfo
+    {
+        try {
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig"), $htmlFilesToMerge);
+            /** @var \SplFileInfo $firstHtmlFile */
+            $firstHtmlFile = $htmlFilesToMerge[0]["body"];
+            $folderPath = $firstHtmlFile->getPathInfo()->getRealPath();
+            $resultFile = new \SplFileObject($folderPath . $resultFileName, "w");
+            $resultFile->fwrite($twigTemplate->getHtml());
+            return $resultFile->getFileInfo();
+        } catch (\Exception $e) {
+            throw new MergingHtmlException($e->getMessage());
+        }
+    }
+
+    /**
+     * Merges a list of Word documents.
+     * @param array $wordDocumentsToMerge
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws MergingWordDocumentException
+     */
+    public function mergeWordDocuments(array $wordDocumentsToMerge, string $resultFileName): \SplFileInfo
+    {
+        // TODO
+        return new \SplFileInfo("");
     }
 
 }

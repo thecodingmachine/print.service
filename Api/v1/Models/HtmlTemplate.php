@@ -91,14 +91,14 @@ class HtmlTemplate extends AbstractTemplateToPopulate
      */
     public function populate(array $data = null)
     {
-        $this->populatedTemplate = $this->fileService->populateHtml($this->template, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
+        $this->populatedTemplate = $this->fileService->populateTwigFile($this->template, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
 
         if (!empty($this->headerTemplate)) {
-            $this->populatedHeaderTemplate = $this->fileService->populateHtml($this->headerTemplate, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
+            $this->populatedHeaderTemplate = $this->fileService->populateTwigFile($this->headerTemplate, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
         }
 
         if (!empty($this->footerTemplate)) {
-            $this->populatedFooterTemplate = $this->fileService->populateHtml($this->footerTemplate, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
+            $this->populatedFooterTemplate = $this->fileService->populateTwigFile($this->footerTemplate, $data, $this->fileService->generateRandomFileName($this->populatedTemplateFileExtension));
         }
     }
 
