@@ -1,6 +1,7 @@
 // loads libraries
 var DocxTemplater = require('docxtemplater'),
     ImageModule = require('docxtemplater-image-module'),
+    sizeOf = require('image-size'),
     LinkModule = require('docxtemplater-link-module'),
     ChartModule = require('docxtemplater-chart-module'),
     fs = require('fs');
@@ -51,10 +52,21 @@ if (typeof arguments[2] !== 'undefined' && arguments[2].length > 0) {
     throw new Error('Please provide the populated template real path.');
 }
 
+var imageOptions = {};
+
+imageOptions.getImage=function(tagValue, tagName) {
+    return fs.readFileSync(tagValue, 'binary');
+};
+
+imageOptions.getSize = function(image) {
+    var sizeObj = sizeOf(image);
+    return [ sizeObj.width, sizeObj.height ];
+};
+
 // last but not least, generates the populated template
 fs.readFile(templateRealPath, function(err, data) {
     document = new DocxTemplater();
-    document.attachModule(new ImageModule());
+    document.attachModule(new ImageModule(imageOptions));
     document.attachModule(new LinkModule());
     document.attachModule(new ChartModule());
     document.load(data);

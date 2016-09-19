@@ -69,6 +69,8 @@ class Document
                 continue;
             }
 
+
+            // FIXME : checks for size in document,
             if (isset($currentData["url"]) && !empty($currentData["url"]) && isset($currentData["ext"]) && !empty($currentData["ext"])) {
                 $file = $this->downloadImage($currentData["url"], $currentData["ext"]);
                 $data[$key] = $file->getRealPath();
