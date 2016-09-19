@@ -49,6 +49,9 @@ class Document
         $this->parseDataForImages($this->data);
     }
 
+    /**
+     * Removes images from disk.
+     */
     function __destruct()
     {
         // TODO: Implement __destruct() method.
@@ -72,7 +75,7 @@ class Document
                 continue;
             }
 
-            $this->parseDataForImages($data);
+            $this->parseDataForImages($currentData);
         }
     }
 

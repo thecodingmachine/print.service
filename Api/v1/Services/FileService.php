@@ -94,6 +94,7 @@ class FileService
     }
 
     /**
+     * Populates a Word document.
      * @param \SplFileInfo $file
      * @param array $data
      * @param string $resultFileName

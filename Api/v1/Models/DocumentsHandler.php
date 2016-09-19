@@ -75,6 +75,9 @@ class DocumentsHandler
         }
     }
 
+    /**
+     * Removes final document from disk.
+     */
     function __destruct()
     {
         // TODO: Implement __destruct() method.
