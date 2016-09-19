@@ -14,7 +14,8 @@ class MergingWordDocumentException extends \Exception
     public function __construct()
     {
         $this->code = 500;
-        $this->message = "Merging Word document exception: failed to merge Word documents.";
+        //$this->message = "Merging Word document exception: failed to merge Word documents.";
+        $this->message = "Merging Word document exception: this method is not implemented yet.";
     }
 
 }

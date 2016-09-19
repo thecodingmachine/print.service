@@ -1,8 +1,10 @@
 <?php
 namespace Api\v1\Models;
+
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Api\v1\Services\FileService;
 
 /**
  * Class Document
@@ -10,6 +12,11 @@ use Api\v1\Exceptions\WordDocumentToPdfException;
  */
 class Document
 {
+
+    /**
+     * @var FileService
+     */
+    private $fileService;
 
     /**
      * @var \SplPriorityQueue<AbstractTemplate>
@@ -22,13 +29,66 @@ class Document
     private $data;
 
     /**
-     * Document constructor.
-     * @param array|null $data
+     * @var array<\SplFileInfo>
      */
-    public function __construct(array $data = null)
+    private $images;
+
+    /**
+     * Document constructor.
+     * @param FileService $fileService
+     * @param array|null $data
+     * @throws \Exception
+     */
+    public function __construct(FileService $fileService, array $data = null)
     {
+        $this->fileService = $fileService;
         $this->templates = new \SplPriorityQueue();
         $this->data = $data;
+        $this->images = [];
+
+        $this->parseDataForImages($this->data);
+    }
+
+    function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+    }
+
+    /**
+     * Parses the data looking for images to download.
+     * @param array $data
+     * @throw \Exception
+     */
+    private function parseDataForImages(array $data)
+    {
+        foreach ($data as $key => $currentData) {
+            if (!is_array($currentData)) {
+                continue;
+            }
+
+            if (isset($currentData["url"]) && !empty($currentData["url"]) && isset($currentData["ext"]) && !empty($currentData["ext"])) {
+                $file = $this->downloadImage($currentData["url"], $currentData["ext"]);
+                $data[$key] = $file->getRealPath();
+                continue;
+            }
+
+            $this->parseDataForImages($data);
+        }
+    }
+
+    /**
+     * Download an image and adds it to the array of images.
+     * @param string $url
+     * @param string $ext
+     * @return \SplFileInfo
+     * @throws \Exception
+     */
+    private function downloadImage(string $url, string $ext): \SplFileInfo
+    {
+        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName($ext), $url);
+        $images[] = $file;
+
+        return $file;
     }
 
     /**
@@ -55,6 +115,7 @@ class Document
     /**
      * Populates the templates.
      * @throws UnprocessableEntityException
+     * @throws \Exception
      */
     public function populateTemplates()
     {

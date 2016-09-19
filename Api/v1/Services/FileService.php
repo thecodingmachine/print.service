@@ -225,8 +225,7 @@ class FileService
      */
     public function mergeWordDocuments(array $wordDocumentsToMerge, string $resultFileName): \SplFileInfo
     {
-        // TODO
-        return new \SplFileInfo("");
+        throw new MergingWordDocumentException();
     }
 
 }

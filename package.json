@@ -13,6 +13,11 @@
     "url": "https://github.com/thecodingmachine/print.service/issues"
   },
   "dependencies": {
-    "docxtemplater": "^2.1.5"
+    "docxtemplater": "^2.1.5",
+    "docxtemplater-chart-module": "^2.0.0",
+    "docxtemplater-image-module": "^1.0.4",
+    "docxtemplater-link-module": "^0.1.0",
+    "image-size": "^0.5.0",
+    "jszip": "^3.1.2"
   }
 }

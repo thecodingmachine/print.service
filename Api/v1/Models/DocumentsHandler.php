@@ -45,6 +45,7 @@ class DocumentsHandler
      * @throws MediaTypeException
      * @throws BadRequestException
      * @throws ContentTypeException
+     * @throws \Exception
      */
     public function __construct(FileService $fileService, string $mediaType, array $postData)
     {
@@ -86,6 +87,7 @@ class DocumentsHandler
      * @throws BadRequestException
      * @throws MediaTypeException
      * @throws ContentTypeException
+     * @throws \Exception
      */
     private function parseSingleDocumentData(array $documentData): Document
     {
@@ -96,7 +98,7 @@ class DocumentsHandler
         $templatesData = $documentData["templates"];
         $data = isset($documentData["data"]) && !empty($documentData["data"]) ? $documentData["data"] : null;
 
-        $document = new Document($data);
+        $document = new Document($this->fileService, $data);
 
         /** @var array $currentTemplateData */
         foreach ($templatesData as $currentTemplateData) {
