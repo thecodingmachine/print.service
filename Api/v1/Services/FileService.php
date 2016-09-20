@@ -226,6 +226,10 @@ class FileService
      */
     public function mergeWordDocuments(array $wordDocumentsToMerge, string $resultFileName): \SplFileInfo
     {
+        if (count($wordDocumentsToMerge) == 1) {
+            return $wordDocumentsToMerge[0];
+        }
+
         throw new MergingWordDocumentException();
     }
 
