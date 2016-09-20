@@ -73,6 +73,7 @@ class HtmlTemplate extends AbstractTemplateToPopulate
      */
     public function download()
     {
+        // TODO add cache.
         if (!empty($this->headerTemplateUrl)) {
             $this->headerTemplate = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->headerTemplateUrl);
         }

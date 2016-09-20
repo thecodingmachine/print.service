@@ -69,8 +69,6 @@ class Document
                 continue;
             }
 
-
-            // FIXME : checks for size in document,
             if (isset($currentData["url"]) && !empty($currentData["url"]) && isset($currentData["ext"]) && !empty($currentData["ext"])) {
                 $file = $this->downloadImage($currentData["url"], $currentData["ext"]);
                 $data[$key] = $file->getRealPath();
@@ -90,6 +88,7 @@ class Document
      */
     private function downloadImage(string $url, string $ext): \SplFileInfo
     {
+        // TODO add cache.
         $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName($ext), $url);
         $images[] = $file;
 
