@@ -36,6 +36,11 @@ class FileService
     private $client;
 
     /**
+     * @var \SplFileInfo
+     */
+    private $temporaryFilesFolder;
+
+    /**
      * FileService constructor.
      * @param \Twig_Environment $twigEnvironment
      */
@@ -44,6 +49,7 @@ class FileService
         $this->twigEnvironment = $twigEnvironment;
         $this->fileSystem = new Filesystem();
         $this->client = new Client();
+        $this->temporaryFilesFolder = new \SplFileInfo(ROOT_PATH . TEMPORARY_FILES_FOLDER);
     }
 
     /**
@@ -65,7 +71,7 @@ class FileService
      */
     public function downloadFile(string $fileName, string $fileUrl): \SplFileInfo
     {
-        $filePath = ROOT_PATH . TEMPORARY_FILES_FOLDER . $fileName;
+        $filePath = $this->temporaryFilesFolder->getRealPath() . $fileName;
         $file = new \SplFileObject($filePath, "w");
         $stream = \GuzzleHttp\Psr7\stream_for($file);
         $this->client->request("GET", $fileUrl, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
@@ -84,7 +90,7 @@ class FileService
     {
         try {
             $twigTemplate = new TwigTemplate($this->twigEnvironment, $file->getRealPath(), $data);
-            $folderPath = $file->getPathInfo()->getRealPath();
+            $folderPath = $this->temporaryFilesFolder->getRealPath();
             $populatedHtmlFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $populatedHtmlFile->fwrite($twigTemplate->getHtml());
             return $populatedHtmlFile->getFileInfo();
@@ -117,7 +123,7 @@ class FileService
      */
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
-        $folderPath = $body->getPathInfo()->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath();
         $wkhtmltopdfCommand = WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
@@ -149,7 +155,7 @@ class FileService
      */
     public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
-        $folderPath = $wordDocument->getPathInfo()->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath();
         $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer -outdir "' . $folderPath . $resultFileName . '"';
 
         $process = new Process();
@@ -171,16 +177,12 @@ class FileService
      */
     public function mergePdfFiles(array $pdfFilesToMerge, string $resultFileName): \SplFileInfo
     {
-        $folderPath = null;
+        $folderPath = $this->temporaryFilesFolder->getRealPath();
         $pdftkCommand = PDFTK_PATH . " ";
 
         /** @var \SplFileInfo $pdfFile */
         foreach ($pdfFilesToMerge as $pdfFile) {
             $pdftkCommand .= $pdfFile->getRealPath() . " ";
-
-            if (empty($folderPath)) {
-                $folderPath = $pdfFile->getPathInfo()->getRealPath();
-            }
         }
 
         $pdftkCommand .= "cat output $folderPath $resultFileName";
@@ -205,10 +207,9 @@ class FileService
     public function mergeHtmlFiles(array $htmlFilesToMerge, string $resultFileName): \SplFileInfo
     {
         try {
-            $twigTemplate = new TwigTemplate($this->twigEnvironment, new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig"), $htmlFilesToMerge);
-            /** @var \SplFileInfo $firstHtmlFile */
-            $firstHtmlFile = $htmlFilesToMerge[0]["body"];
-            $folderPath = $firstHtmlFile->getPathInfo()->getRealPath();
+            $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig");
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, $scriptFile->getRealPath(), $htmlFilesToMerge);
+            $folderPath = $this->temporaryFilesFolder->getRealPath();
             $resultFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $resultFile->fwrite($twigTemplate->getHtml());
             return $resultFile->getFileInfo();

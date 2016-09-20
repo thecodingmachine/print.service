@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Exceptions\BadRequestException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
@@ -12,6 +13,9 @@ use Api\v1\Services\FileService;
  */
 class Document
 {
+
+    const LINK_DATA_TYPE = "link";
+    const IMAGE_DATA_TYPE = "image";
 
     /**
      * @var FileService
@@ -29,6 +33,16 @@ class Document
     private $data;
 
     /**
+     * @var array
+     */
+    private $formattedDataForHtml;
+
+    /**
+     * @var array
+     */
+    private $formattedDataForWordDocument;
+
+    /**
      * @var array<\SplFileInfo>
      */
     private $images;
@@ -37,16 +51,15 @@ class Document
      * Document constructor.
      * @param FileService $fileService
      * @param array|null $data
-     * @throws \Exception
      */
     public function __construct(FileService $fileService, array $data = null)
     {
         $this->fileService = $fileService;
         $this->templates = new \SplPriorityQueue();
         $this->data = $data;
+        $this->formattedDataForHtml = [];
+        $this->formattedDataForWordDocument = [];
         $this->images = [];
-
-        $this->parseDataForImages($this->data);
     }
 
     /**
@@ -58,50 +71,140 @@ class Document
     }
 
     /**
-     * Parses the data looking for images to download.
-     * @param array $data
-     * @throw \Exception
-     */
-    private function parseDataForImages(array $data)
-    {
-        foreach ($data as $key => $currentData) {
-            if (!is_array($currentData)) {
-                continue;
-            }
-
-            if (isset($currentData["url"]) && !empty($currentData["url"]) && isset($currentData["ext"]) && !empty($currentData["ext"])) {
-                $file = $this->downloadImage($currentData["url"], $currentData["ext"]);
-                $data[$key] = $file->getRealPath();
-                continue;
-            }
-
-            $this->parseDataForImages($currentData);
-        }
-    }
-
-    /**
-     * Download an image and adds it to the array of images.
-     * @param string $url
-     * @param string $ext
-     * @return \SplFileInfo
-     * @throws \Exception
-     */
-    private function downloadImage(string $url, string $ext): \SplFileInfo
-    {
-        // TODO add cache.
-        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName($ext), $url);
-        $images[] = $file;
-
-        return $file;
-    }
-
-    /**
      * Adds a template in the array of templates with the correct order.
      * @param AbstractTemplate $template
+     * @throws BadRequestException
+     * @throws \Exception
      */
     public function addTemplate(AbstractTemplate $template)
     {
         $this->templates->insert($template, $template->getOrder());
+
+        if ($template->getContentType() == AbstractTemplate::HTML_CONTENT_TYPE && empty($this->formattedDataForHtml)) {
+            $this->formattedDataForHtml = $this->formatDataForHtml($this->data);
+        } else if ($template->getContentType() == AbstractTemplate::WORD_CONTENT_TYPE && empty($this->formattedDataForWordDocument)) {
+            $this->formattedDataForWordDocument = $this->formatDataForWordDocument($this->data);
+        }
+    }
+
+    /**
+     * Parses the data and format them for populating HTML templates.
+     * @param array $data
+     * @return array
+     * @throws BadRequestException
+     */
+    private function formatDataForHtml(array $data): array
+    {
+        $formattedData = [];
+
+        foreach ($data as $key => $currentData) {
+            if (!is_array($currentData)) {
+                $formattedData[$key] = $currentData;
+                continue;
+            }
+
+            if (isset($currentData["type"])) {
+
+                if (empty($currentData["type"])) {
+                    throw new BadRequestException();
+                }
+
+                switch ($currentData["type"]) {
+                    case Document::LINK_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+
+                        if (isset($currentData["text"]) && empty($currentData["text"])) {
+                            throw new BadRequestException();
+                        }
+                        $this->$formattedData[$key] = isset($currentData["text"]) ? ["text" => $currentData["text"], "url" => $currentData["url"]] : $currentData["url"];
+                        break;
+                    case Document::IMAGE_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+                        $this->$formattedData[$key] = $currentData["url"];
+                        break;
+                    default:
+                        throw new BadRequestException();
+                }
+                continue;
+            }
+
+            $formattedData[$key] = $this->formatDataForHtml($currentData);
+        }
+
+        return $formattedData;
+    }
+
+    /**
+     * Parses the data looking for images to download and format the data for populating Word templates.
+     * @param array
+     * @return array
+     * @throws BadRequestException
+     * @throws \Exception
+     */
+    private function formatDataForWordDocument(array $data): array
+    {
+        $formattedData = [];
+
+        foreach ($data as $key => $currentData) {
+            if (!is_array($currentData)) {
+                $formattedData[$key] = $currentData;
+                continue;
+            }
+
+            if (isset($currentData["type"])) {
+
+                if (empty($currentData["type"])) {
+                    throw new BadRequestException();
+                }
+
+                switch ($currentData["type"]) {
+                    case Document::LINK_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+
+                        if (isset($currentData["text"]) && empty($currentData["text"])) {
+                            throw new BadRequestException();
+                        }
+                        $this->$formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
+                        break;
+                    case Document::IMAGE_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+                        $file = $this->downloadImage($currentData["url"]);
+                        $this->$formattedData[$key] = $file->getRealPath();
+                        break;
+                    default:
+                        throw new BadRequestException();
+                }
+                continue;
+            }
+
+            $formattedData[$key] = $this->formatDataForWordDocument($currentData);
+        }
+
+        return $formattedData;
+    }
+
+    /**
+     * Downloads an image and adds it to the array of images.
+     * @param string $url
+     * @return \SplFileInfo
+     * @throws \Exception
+     */
+    private function downloadImage(string $url): \SplFileInfo
+    {
+        // TODO add cache.
+        // TODO check file ext.
+        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(""), $url);
+        $images[] = $file;
+
+        return $file;
     }
 
     /**
@@ -125,11 +228,16 @@ class Document
     {
         /** @var AbstractTemplate $currentTemplate */
         foreach ($this->templates as $currentTemplate) {
-           $contentType = $currentTemplate->getContentType();
+            $contentType = $currentTemplate->getContentType();
 
-            if ($contentType != AbstractTemplate::PDF_CONTENT_TYPE) {
-                /** @var AbstractTemplateToPopulate $currentTemplate */
-                $currentTemplate->populate($this->data);
+            switch ($contentType) {
+                case AbstractTemplate::HTML_CONTENT_TYPE:
+                    /** @var HtmlTemplate $currentTemplate */
+                    $currentTemplate->populate($this->formattedDataForHtml);
+                    break;
+                case AbstractTemplate::WORD_CONTENT_TYPE:
+                    /** @var WordTemplate $currentTemplate */
+                    $currentTemplate->populate($this->formattedDataForWordDocument);
             }
         }
     }

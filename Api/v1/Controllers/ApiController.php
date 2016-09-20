@@ -26,6 +26,7 @@ class ApiController
      */
     public function __construct(FileService $fileService)
     {
+        // TODO available urls.
         $this->fileService = $fileService;
     }
 
@@ -37,7 +38,7 @@ class ApiController
      */
     public function generate(ServerRequestInterface $request)
     {
-        // TODO basic auth
+        // TODO basic auth.
         try {
             $accept = $request->getHeaderLine("Accept");
             $postData = $request->getParsedBody();
@@ -65,7 +66,7 @@ class ApiController
      */
     public function merge(ServerRequestInterface $request)
     {
-        // TODO basic auth
+        // TODO basic auth.
         try {
             $accept = $request->getHeaderLine("Accept");
             $postData = $request->getParsedBody();
