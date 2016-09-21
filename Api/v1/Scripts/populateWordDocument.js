@@ -7,7 +7,7 @@ var DocxTemplater = require('docxtemplater'),
     fs = require('fs');
 
 // initializes working variables
-var templateRealPath, jsonDataRealPath, jsonData, populatedTemplateRealPath, document, content, buffer = null;
+var templateRealPath/*, jsonDataRealPath*/, jsonData, populatedTemplateRealPath, document, content, buffer = null;
 
 // retrieves the arguments
 var arguments = process.argv.slice(2);
@@ -28,7 +28,12 @@ if (typeof arguments[0] !== 'undefined') {
 }
 
 if (typeof arguments[1] !== 'undefined') {
-    jsonDataRealPath = arguments[1];
+    try {
+        jsonData = JSON.parse(arguments[1]);
+    } catch (e) {
+        throw new Error ('Please provide a valid JSON.')
+    }
+    /*jsonDataRealPath = arguments[1];
 
     if (!fs.existsSync(jsonDataRealPath)) {
         throw new Error('Unable to fin the JSON file at the location "' + jsonDataRealPath + '".')
@@ -39,10 +44,11 @@ if (typeof arguments[1] !== 'undefined') {
         jsonData = JSON.parse(content);
     } catch (e) {
         throw new Error ('Please provide a valid JSON.')
-    }
+    }*/
 
 } else {
-    throw new Error('Please provide the JSON data real path.')
+   // throw new Error('Please provide the JSON data real path.')
+    throw new Error('Please provide the JSON data.')
 }
 
 if (typeof arguments[2] !== 'undefined' && arguments[2].length > 0) {

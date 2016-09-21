@@ -44,6 +44,12 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => '',
   ),
+  'NODE_PATH' => 
+  array (
+    'defaultValue' => '/usr/local/bin/node',
+    'type' => 'string',
+    'comment' => '',
+  ),
 ));
 
 $moufManager->setAllVariables(array (

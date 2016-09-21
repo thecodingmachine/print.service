@@ -63,14 +63,6 @@ class Document
     }
 
     /**
-     * Removes images from disk.
-     */
-    function __destruct()
-    {
-        // TODO: Implement __destruct() method.
-    }
-
-    /**
      * Adds a template in the array of templates with the correct order.
      * @param AbstractTemplate $template
      * @throws BadRequestException
@@ -199,9 +191,8 @@ class Document
      */
     private function downloadImage(string $url): \SplFileInfo
     {
-        // TODO add cache.
         // TODO check file ext.
-        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(""), $url);
+        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url);
         $images[] = $file;
 
         return $file;

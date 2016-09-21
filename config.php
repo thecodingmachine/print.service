@@ -17,3 +17,4 @@ define('PDFTK_PATH', '/usr/local/bin/pdftk');
 define('WKHTMLTOPDF_PATH', '/usr/local/bin/wkhtmltopdf');
 define('LIBREOFFICE_PATH', '/usr/local/bin/soffice');
 define('TEMPORARY_FILES_FOLDER', 'tmp/');
+define('NODE_PATH', '/usr/local/bin/node');

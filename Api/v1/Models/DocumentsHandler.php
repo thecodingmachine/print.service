@@ -80,7 +80,7 @@ class DocumentsHandler
      */
     function __destruct()
     {
-        // TODO: Implement __destruct() method.
+        $this->fileService->removeFileFromDisk($this->finalDocument);
     }
 
     /**

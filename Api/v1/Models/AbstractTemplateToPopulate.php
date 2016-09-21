@@ -58,7 +58,7 @@ abstract class AbstractTemplateToPopulate extends AbstractTemplate
      */
     function __destruct()
     {
-        // TODO: Implement __destruct() method.
+        $this->fileService->removeFileFromDisk($this->populatedTemplate);
     }
 
     /**

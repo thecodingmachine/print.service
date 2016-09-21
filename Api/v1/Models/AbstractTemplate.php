@@ -81,7 +81,6 @@ abstract class AbstractTemplate
      */
     public function download()
     {
-        // TODO add cache
         $this->template = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->templateUrl);
     }
 

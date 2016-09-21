@@ -7,8 +7,13 @@ use Api\v1\Exceptions\MergingPdfException;
 use Api\v1\Exceptions\MergingWordDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Doctrine\Common\Cache\FilesystemCache;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
+use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
 use Mouf\Html\Renderer\Twig\TwigTemplate;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -47,9 +52,12 @@ class FileService
     public function __construct(\Twig_Environment $twigEnvironment)
     {
         $this->twigEnvironment = $twigEnvironment;
-        $this->fileSystem = new Filesystem();
-        $this->client = new Client();
         $this->temporaryFilesFolder = new \SplFileInfo(ROOT_PATH . TEMPORARY_FILES_FOLDER);
+        $this->fileSystem = new Filesystem();
+        $stack = HandlerStack::create();
+        $stack->push(new CacheMiddleware(new PrivateCacheStrategy(new DoctrineCacheStorage(new FilesystemCache($this->temporaryFilesFolder->getRealPath())))), "cache");
+        $this->client = new Client([ "handler" => $stack ]);
+
     }
 
     /**
@@ -57,7 +65,7 @@ class FileService
      * @param string $ext
      * @return string
      */
-    public function generateRandomFileName(string $ext): string
+    public function generateRandomFileName(string $ext = ""): string
     {
         return substr(str_shuffle(str_repeat($x="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", ceil(5/strlen($x)))), 1, 5) . "_dt_" . time() . $ext;
     }
@@ -109,7 +117,18 @@ class FileService
      */
     public function populateWordDocument(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
     {
-        // TODO
+        $folderPath = $this->temporaryFilesFolder->getRealPath();
+        $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/populateWordDocument.js");
+        $nodeCommand = NODE_PATH . " " . $scriptFile->getRealPath() . " " . $file->getRealPath() . " " . json_encode($data) . " " . $folderPath . $resultFileName;
+
+        $process = new Process();
+        $process->run($nodeCommand);
+
+        if (!$process->isSuccessful()) {
+            throw new UnprocessableEntityException($process->getErrorOutput());
+        }
+
+        return new \SplFileInfo($folderPath . $resultFileName);
     }
 
     /**
@@ -134,7 +153,7 @@ class FileService
             $wkhtmltopdfCommand .= "--footer-html " . $footer->getRealPath() . " --margin-bottm 15mm --footer-spacing -3 ";
         }
 
-        $wkhtmltopdfCommand .= $body->getRealPath() . " $folderPath $resultFileName";
+        $wkhtmltopdfCommand .= $body->getRealPath() . " " . $folderPath . $resultFileName;
 
         $process = new Process();
         $process->run($wkhtmltopdfCommand);
@@ -232,6 +251,23 @@ class FileService
         }
 
         throw new MergingWordDocumentException();
+    }
+
+    /**
+     * Removes a file from disk.
+     * @param \SplFileInfo $file
+     */
+    public function removeFileFromDisk(\SplFileInfo $file)
+    {
+        if (!empty($file)) {
+            if ($this->fileSystem->exists($file->getRealPath())) {
+                try {
+                    $this->fileSystem->remove($file->getRealPath());
+                } catch (\Exception $e) {
+                    error_log($e->getMessage());
+                }
+            }
+        }
     }
 
 }
