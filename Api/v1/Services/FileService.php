@@ -204,7 +204,7 @@ class FileService
             $pdftkCommand .= $pdfFile->getRealPath() . " ";
         }
 
-        $pdftkCommand .= "cat output $folderPath $resultFileName";
+        $pdftkCommand .= "cat output " . $folderPath . $resultFileName;
 
         $process = new Process();
         $process->run($pdftkCommand);
