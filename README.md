@@ -82,7 +82,7 @@ Also this API works with basic authentification. Please look at [API configurati
     * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images charts of a word template)
     * <https://github.com/sujith3g/docxtemplater-link-module> (module for populating links of a word template)
 
-## Single document JSON
+## Example of a JSON for a single document
 
 ```json
 {
