@@ -221,7 +221,7 @@ Allows to generate many documents and merge them into one final document.
 
 ### Defining user(s) for HTTP basic authentification
 
-Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and updates the options parameter.
+Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and update the options parameter.
 
 ## API stack
 
