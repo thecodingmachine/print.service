@@ -7,8 +7,13 @@ use Api\v1\Exceptions\MergingPdfException;
 use Api\v1\Exceptions\MergingWordDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Doctrine\Common\Cache\FilesystemCache;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\HandlerStack;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
+use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
+use Zend\Diactoros\Response;
 use GuzzleHttp\RequestOptions;
 use Mouf\Html\Renderer\Twig\TwigTemplate;
 use Symfony\Component\Filesystem\Filesystem;
@@ -50,7 +55,19 @@ class FileService
         $this->twigEnvironment = $twigEnvironment;
         $this->temporaryFilesFolder = new \SplFileInfo(ROOT_PATH . TEMPORARY_FILES_FOLDER);
         $this->fileSystem = new Filesystem();
-        $this->client = new Client();
+
+        $stack = HandlerStack::create();
+        $stack->push(
+            new CacheMiddleware(
+                new PrivateCacheStrategy(
+                    new DoctrineCacheStorage(
+                        new FilesystemCache($this->temporaryFilesFolder->getRealPath())
+                    )
+                )
+            ),
+            "cache"
+        );
+        $this->client = new Client(["handler" => $stack]);
     }
 
     /**
@@ -155,7 +172,7 @@ class FileService
             throw new HtmlToPdfException();
         }
 
-       return new \SplFileInfo($folderPath . $resultFileName);
+        return new \SplFileInfo($folderPath . $resultFileName);
     }
 
     /**
@@ -255,22 +272,16 @@ class FileService
     public function serveFile(\SplFileInfo $file, string $contentType): Response
     {
         $attachedFile = fopen($file->getRealPath(), "r");
-        $stream = \GuzzleHttp\Psr7\stream_for($attachedFile);
 
-        var_dump($file->getRealPath());
-
-        $response = new Response();
-        $response->withHeader("Content-Description", "File Transfer");
-        $response->withHeader("Content-Type", $contentType);
-        $response->withHeader("Content-Disposition", "attachement; filename=" . $file->getBasename());
-        $response->withHeader("Content-Transfer-Encoding", "binary");
-        $response->withHeader("Expires", "0");
-        $response->withHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
-        $response->withHeader("Pragma", "public");
-        $response->withHeader("Content-Length", $file->getSize());
-        $response->withBody($stream);
-
-        var_dump($response);
+        $response = (new Response($attachedFile, 200))
+            ->withHeader("Content-Description", "File Transfer")
+            ->withHeader("Content-Type", $contentType)
+            ->withHeader("Content-Disposition", "attachement; filename=" . $file->getBasename())
+            ->withHeader("Content-Transfer-Encoding", "binary")
+            ->withHeader("Expires", "0")
+            ->withHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0")
+            ->withHeader("Pragma", "public")
+            ->withHeader("Content-Length", (string) $file->getSize());
 
         return $response;
     }

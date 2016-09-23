@@ -2,3 +2,4 @@
 
 docker pull composer/composer:alpine
 docker run --rm -v $1:/app composer/composer:alpine $2
+chown -R www-data:www-data vendor

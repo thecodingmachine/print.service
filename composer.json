@@ -4,7 +4,9 @@
     "mouf/mvc.splash": "~8.0",
     "guzzlehttp/guzzle": "~6.0",
     "symfony/process": "~3.0.1",
-    "symfony/filesystem": "~2.3"
+    "symfony/filesystem": "~2.3",
+    "kevinrob/guzzle-cache-middleware": "~1.4.3",
+    "tuupola/slim-basic-auth": "~2.2.0"
   },
   "autoload": {
     "psr-4": {

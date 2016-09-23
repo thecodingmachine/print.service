@@ -391,12 +391,13 @@ $moufManager->addComponentInstances(array (
       array (
         'value' => 
         array (
-          0 => '__anonymous__2e32_766222_1473858447177',
-          1 => '__anonymous__2e32_1193726777',
-          2 => '__anonymous__2e32_1168295569',
-          3 => '__anonymous__2e32_1083046185',
-          4 => '__anonymous__2e32_1984332620',
-          5 => '__anonymous__2e32_1122304490',
+          0 => '__anonymous__2e32_306812_1474630791154',
+          1 => '__anonymous__2e32_766222_1473858447177',
+          2 => '__anonymous__2e32_1193726777',
+          3 => '__anonymous__2e32_1168295569',
+          4 => '__anonymous__2e32_1083046185',
+          5 => '__anonymous__2e32_1984332620',
+          6 => '__anonymous__2e32_1122304490',
         ),
         'parametertype' => 'object',
         'type' => 'string',
@@ -551,6 +552,25 @@ $moufManager->addComponentInstances(array (
         'value' => '__anonymous__2e32_16918206',
         'parametertype' => 'object',
         'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  '__anonymous__2e32_306812_1474630791154' => 
+  array (
+    'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
+    'external' => false,
+    'weak' => true,
+    'anonymous' => true,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'return $container->get(\'httpBasicAuthenticationMiddleware\');',
+        'parametertype' => 'primitive',
+        'type' => 'php',
         'metadata' => 
         array (
         ),
@@ -885,6 +905,31 @@ return $driver;
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  'httpBasicAuthenticationMiddleware' => 
+  array (
+    'class' => 'Slim\\Middleware\\HttpBasicAuthentication',
+    'external' => false,
+    'weak' => false,
+    'setterProperties' => 
+    array (
+    ),
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 'return [
+    "users" => [
+        "print-service" => password_hash("apideo", PASSWORD_DEFAULT)
+    ]
+];',
+        'parametertype' => 'primitive',
+        'type' => 'php',
         'metadata' => 
         array (
         ),
@@ -1318,6 +1363,13 @@ class Mouf {
 					},
 				],
 			],
+			'__anonymous__2e32_306812_1474630791154' => [
+				'constructor' => [
+					0 => function(ContainerInterface $container) {
+						return $container->get('httpBasicAuthenticationMiddleware');
+					},
+				],
+			],
 			'__anonymous__2e32_766222_1473858447177' => [
 				'constructor' => [
 					0 => function(ContainerInterface $container) {
@@ -1352,6 +1404,17 @@ $driver->setNamespace(SECRET);
 return $driver;
 
 			},
+			'httpBasicAuthenticationMiddleware' => [
+				'constructor' => [
+					0 => function(ContainerInterface $container) {
+						return [
+    "users" => [
+        "print-service" => password_hash("apideo", PASSWORD_DEFAULT)
+    ]
+];
+					},
+				],
+			],
 			'moufTwigExtension' => [
 				'constructor' => [
 					0 => function(ContainerInterface $container) {
@@ -1616,6 +1679,13 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getFileService_v1() {
 	 	return MoufManager::getMoufManager()->get('fileService_v1');
+	 }
+
+	/**
+	 * @return Slim\Middleware\HttpBasicAuthentication
+	 */
+	 public static function getHttpBasicAuthenticationMiddleware() {
+	 	return MoufManager::getMoufManager()->get('httpBasicAuthenticationMiddleware');
 	 }
 
 	/**

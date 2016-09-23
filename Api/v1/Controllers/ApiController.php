@@ -3,7 +3,7 @@ namespace Api\v1\Controllers;
 
 use Api\v1\Models\DocumentsHandler;
 use Api\v1\Services\FileService;
-use GuzzleHttp\Psr7\Response;
+use Zend\Diactoros\Response;
 use Mouf\Mvc\Splash\Annotations\Post;
 use Mouf\Mvc\Splash\Annotations\URL;
 use Psr\Http\Message\ServerRequestInterface;
@@ -48,10 +48,15 @@ class ApiController
             return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
-                "message" => $e->getMessage()
+                "message" => $e->getMessage(),
+                "stackTrace" => $e->getTraceAsString()
             ]);
 
-            return $errorResponse->withStatus($e->getCode());
+            if ($e->getCode() > 100 && $e->getCode() < 599) {
+                return $errorResponse->withStatus($e->getCode());
+            }
+
+            return $errorResponse;
         }
     }
 
@@ -72,10 +77,15 @@ class ApiController
             return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
-                "message" => $e->getMessage()
+                "message" => $e->getMessage(),
+                "stackTrace" => $e->getTraceAsString()
             ]);
 
-            return $errorResponse->withStatus($e->getCode());
+            if ($e->getCode() > 100 && $e->getCode() < 599) {
+                return $errorResponse->withStatus($e->getCode());
+            }
+
+            return $errorResponse;
         }
     }
 

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "59d00ddc4dd08de76281f8c56273c71f",
-    "content-hash": "225d22f7ac52dc37257f94a449973cfa",
+    "hash": "88e04fc381371fc6db54799ab94f809d",
+    "content-hash": "04eedc4f3a06bdc22749932c0ee8b45f",
     "packages": [
         {
             "name": "cache/adapter-common",
@@ -2252,16 +2252,16 @@
         },
         {
             "name": "mouf/utils.cache.file-cache",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/utils.cache.file-cache.git",
-                "reference": "1364ebe903354440c2b3b47c4d918233d8d3ebd2"
+                "reference": "b1ebeabac2c0ed3b1b1e3747824bdd93a6d270ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/utils.cache.file-cache/zipball/1364ebe903354440c2b3b47c4d918233d8d3ebd2",
-                "reference": "1364ebe903354440c2b3b47c4d918233d8d3ebd2",
+                "url": "https://api.github.com/repos/thecodingmachine/utils.cache.file-cache/zipball/b1ebeabac2c0ed3b1b1e3747824bdd93a6d270ec",
+                "reference": "b1ebeabac2c0ed3b1b1e3747824bdd93a6d270ec",
                 "shasum": ""
             },
             "require": {
@@ -2305,7 +2305,7 @@
                 "file",
                 "mouf"
             ],
-            "time": "2015-12-31 13:37:36"
+            "time": "2016-09-22 08:32:19"
         },
         {
             "name": "mouf/utils.cache.in-memory-cache",
@@ -3428,17 +3428,66 @@
             "time": "2016-05-16 16:41:34"
         },
         {
-            "name": "twig/twig",
-            "version": "v1.24.2",
+            "name": "tuupola/slim-basic-auth",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7"
+                "url": "https://github.com/tuupola/slim-basic-auth.git",
+                "reference": "98dc4679e742c53171efaff042659d60a3160606"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
-                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "url": "https://api.github.com/repos/tuupola/slim-basic-auth/zipball/98dc4679e742c53171efaff042659d60a3160606",
+                "reference": "98dc4679e742c53171efaff042659d60a3160606",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.3",
+                "squizlabs/php_codesniffer": "^2.3",
+                "zendframework/zend-diactoros": "^1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Slim\\Middleware\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mika Tuupola",
+                    "email": "tuupola@appelsiini.net",
+                    "homepage": "http://www.appelsiini.net/"
+                }
+            ],
+            "description": "PSR-7 HTTP Basic Authentication Middleware",
+            "homepage": "http://www.appelsiini.net/projects/slim-basic-auth",
+            "keywords": [
+                "auth",
+                "middleware",
+                "psr-7"
+            ],
+            "time": "2016-09-21 20:50:02"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.25.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f16a634ab08d87e520da5671ec52153d627f10f6",
+                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6",
                 "shasum": ""
             },
             "require": {
@@ -3451,7 +3500,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.24-dev"
+                    "dev-master": "1.25-dev"
                 }
             },
             "autoload": {
@@ -3486,7 +3535,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-09-01 17:50:53"
+            "time": "2016-09-21 23:05:12"
         },
         {
             "name": "zendframework/zend-diactoros",

@@ -1,18 +1,28 @@
+# Goals
+
+Simple API for generating documents according to various types of tempaltes (.twig, .docx, .pdf) and a set of data.
+
 # API
 
 ## Request headers
 
+Your request must have the following headers:
+
 **Content-Type:** application/json
+
+If you want a HTML output:
 
 **Accept:** text/html 
 
-or 
+A Word document output:
 
 **Accept:** application/vnd.openxmlformats-officedocument.wordprocessingml.document 
 
-or 
+A PDF document output: 
 
 **Accept:** application/pdf
+
+Also this API works with basic authentification. Please look at [API configuration](#API-configuration)
 
 ## Single document JSON
 
@@ -97,7 +107,7 @@ For example :
 }
 ```
 
-This request will throws an exception if you wanted a HTML or a Word document output.
+This request will throw an exception if you are requesitng a HTML or a Word document output.
 
 ## /api/v1/generate
 
@@ -144,3 +154,22 @@ Allows to generate many documents and merge them into one final document.
     }
 ]
 ```
+
+# API configuration
+
+## Defining user(s) for HTTP basic authentification
+
+Go to http://yourdomain.com/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware and updates the options parameter.
+
+# API stack
+
+This API use:
+
+* PDFtk: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/ (merging PDF)
+* wkhtmltopdf: http://wkhtmltopdf.org/ (HTML to PDF)
+* LibreOffice: https://www.libreoffice.org/download/libreoffice-fresh/ (Word to PDF conversion with soffice command)
+* Node 4_x with the following libraries:
+    * https://github.com/open-xml-templating/docxtemplater (for populating a word template)
+    * https://github.com/prog666/docxtemplater-chart-module (module for populating charts of a word template)
+    * https://github.com/open-xml-templating/docxtemplater-image-module (module for images charts of a word template)
+    * https://github.com/sujith3g/docxtemplater-link-module (module for populating links of a word template)
