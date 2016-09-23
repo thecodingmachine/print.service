@@ -261,11 +261,11 @@ For example :
 
 This request will throw an exception if you are requesting a HTML or a Word document output.
 
-## /api/v1/generate (POST)
+## api/v1/documents/generate (POST)
 
 Allows to generate a single document according to one or more templates and data.
 
-## /api/v1/merge (POST)
+## api/v1/documents/merge (POST)
 
 Allows to generate many documents and merge them into one final document.
 
