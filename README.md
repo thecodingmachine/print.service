@@ -2,9 +2,17 @@
 
 ## Request headers
 
-**Content-Type: application/json**
+**Content-Type:** application/json
 
-**Accept: text/html** or **Accept: application/vnd.openxmlformats-officedocument.wordprocessingml.document** or **Accept: application/pdf**
+**Accept:** text/html 
+
+or 
+
+**Accept:** application/vnd.openxmlformats-officedocument.wordprocessingml.document 
+
+or 
+
+**Accept:** application/pdf
 
 ## Single document JSON
 
@@ -12,19 +20,19 @@
 {
     "templates": [
         {
-            "order": 0
+            "order": 0,
             "contentType": "text/html",
             "url": "http://adomain.com/yourTemplate.twig"
             "headerUrl": "http://adomain.com/yourTemplate.twig"
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
-            "order": 1
+            "order": 1,
             "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "url": "http://adomain.com/yourTemplate.docx"
         },
         {
-            "order": 2
+            "order": 2,
             "contentType": "application/pdf",
             "url": "http://adomain.com/yourTemplate.pdf"
         },
@@ -66,19 +74,19 @@ For example :
 {
     "templates": [
         {
-            "order": 0
+            "order": 0,
             "contentType": "text/html",
             "url": "http://adomain.com/yourTemplate.twig"
             "headerUrl": "http://adomain.com/yourTemplate.twig"
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
-            "order": 1
+            "order": 1,
             "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "url": "http://adomain.com/yourTemplate.docx"
         },
         {
-            "order": 2
+            "order": 2,
             "contentType": "application/pdf",
             "url": "http://adomain.com/yourTemplate.pdf"
         },
@@ -103,7 +111,7 @@ Allows to generate many documents and merge them into one final document.
 [{
     "templates": [
         {
-            "order": 0
+            "order": 0,
             "contentType": "application/pdf",
             "url": "http://adomain.com/yourTemplate.pdf"
         },
@@ -111,19 +119,19 @@ Allows to generate many documents and merge them into one final document.
 },
     "templates": [
         {
-            "order": 0
+            "order": 0,
             "contentType": "text/html",
             "url": "http://adomain.com/yourTemplate.twig"
             "headerUrl": "http://adomain.com/yourTemplate.twig"
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
-            "order": 1
+            "order": 1,
             "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "url": "http://adomain.com/yourTemplate.docx"
         },
         {
-            "order": 2
+            "order": 2,
             "contentType": "application/pdf",
             "url": "http://adomain.com/yourTemplate.pdf"
         },
