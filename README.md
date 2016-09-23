@@ -68,7 +68,7 @@ A PDF document output:
 
 **Accept:** application/pdf
 
-Also this API works with basic authentification. Please look at [API configuration](#api-configuration)!
+Also this API works with basic authentication. Please look at [API configuration](#api-configuration)!
 
 ## API stack
 
