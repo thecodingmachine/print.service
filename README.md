@@ -32,7 +32,7 @@ Move to the root directory of the project. You'll have to launch the following c
 
 ## Last but not least
  
-Install Mouf framework: http://localhost/vendor/mouf/mouf
+Install Mouf framework: <http://localhost/vendor/mouf/mouf>
 
 # Candies
 
@@ -221,21 +221,19 @@ Allows to generate many documents and merge them into one final document.
 
 ### Defining user(s) for HTTP basic authentification
 
-Go to http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware and updates the options parameter.
+Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and updates the options parameter.
 
 ## API stack
 
-This API use:
-
-* twig: http://twig.sensiolabs.org/ (twig to HTML)
-* PDFtk: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/ (merging PDF)
-* wkhtmltopdf: http://wkhtmltopdf.org/ (HTML to PDF)
-* LibreOffice: https://www.libreoffice.org/download/libreoffice-fresh/ (Word to PDF conversion with soffice command)
+* twig: <http://twig.sensiolabs.org/> (twig to HTML)
+* PDFtk: <https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/> (merging PDF)
+* wkhtmltopdf: <http://wkhtmltopdf.org/> (HTML to PDF)
+* LibreOffice: <https://www.libreoffice.org/download/libreoffice-fresh/> (Word to PDF conversion with soffice command)
 * Node 4_x with the following libraries:
-    * https://github.com/open-xml-templating/docxtemplater (for populating a word template)
-    * https://github.com/prog666/docxtemplater-chart-module (module for populating charts of a word template)
-    * https://github.com/open-xml-templating/docxtemplater-image-module (module for images charts of a word template)
-    * https://github.com/sujith3g/docxtemplater-link-module (module for populating links of a word template)
+    * <https://github.com/open-xml-templating/docxtemplater> (for populating a word template)
+    * <https://github.com/prog666/docxtemplater-chart-module> (module for populating charts of a word template)
+    * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images charts of a word template)
+    * <https://github.com/sujith3g/docxtemplater-link-module> (module for populating links of a word template)
     
 # Known issues
     
