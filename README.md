@@ -108,36 +108,39 @@ Allows to generate a single document according to one or more templates and data
 Allows to generate many documents and merge them into one final document.
 
 ```json
-[{
-    "templates": [
-        {
-            "order": 0,
-            "contentType": "application/pdf",
-            "url": "http://adomain.com/yourTemplate.pdf"
-        },
-    ]
-},
-    "templates": [
-        {
-            "order": 0,
-            "contentType": "text/html",
-            "url": "http://adomain.com/yourTemplate.twig",
-            "headerUrl": "http://adomain.com/yourTemplate.twig",
-            "footerUrl": "http://adomain.com/yourTemplate.twig"
-        },
-        {
-            "order": 1,
-            "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "url": "http://adomain.com/yourTemplate.docx"
-        },
-        {
-            "order": 2,
-            "contentType": "application/pdf",
-            "url": "http://adomain.com/yourTemplate.pdf"
-        },
-    ],
-    "data": {
-        "property1": "value"
+[
+    {
+        "templates": [
+            {
+                "order": 0,
+                "contentType": "application/pdf",
+                "url": "http://adomain.com/yourTemplate.pdf"
+            },
+        ]
+    },
+    {
+        "templates": [
+            {
+                "order": 0,
+                "contentType": "text/html",
+                "url": "http://adomain.com/yourTemplate.twig",
+                "headerUrl": "http://adomain.com/yourTemplate.twig",
+                "footerUrl": "http://adomain.com/yourTemplate.twig"
+            },
+            {
+                "order": 1,
+                "contentType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "url": "http://adomain.com/yourTemplate.docx"
+            },
+            {
+                "order": 2,
+                "contentType": "application/pdf",
+                "url": "http://adomain.com/yourTemplate.pdf"
+            },
+        ],
+        "data": {
+            "property1": "value"
+        }
     }
-}]
+]
 ```
