@@ -22,8 +22,8 @@ or
         {
             "order": 0,
             "contentType": "text/html",
-            "url": "http://adomain.com/yourTemplate.twig"
-            "headerUrl": "http://adomain.com/yourTemplate.twig"
+            "url": "http://adomain.com/yourTemplate.twig",
+            "headerUrl": "http://adomain.com/yourTemplate.twig",
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
@@ -76,8 +76,8 @@ For example :
         {
             "order": 0,
             "contentType": "text/html",
-            "url": "http://adomain.com/yourTemplate.twig"
-            "headerUrl": "http://adomain.com/yourTemplate.twig"
+            "url": "http://adomain.com/yourTemplate.twig",
+            "headerUrl": "http://adomain.com/yourTemplate.twig",
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
@@ -121,8 +121,8 @@ Allows to generate many documents and merge them into one final document.
         {
             "order": 0,
             "contentType": "text/html",
-            "url": "http://adomain.com/yourTemplate.twig"
-            "headerUrl": "http://adomain.com/yourTemplate.twig"
+            "url": "http://adomain.com/yourTemplate.twig",
+            "headerUrl": "http://adomain.com/yourTemplate.twig",
             "footerUrl": "http://adomain.com/yourTemplate.twig"
         },
         {
