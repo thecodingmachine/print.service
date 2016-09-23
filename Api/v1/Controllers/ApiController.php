@@ -39,7 +39,6 @@ class ApiController
      */
     public function generate(ServerRequestInterface $request)
     {
-        // TODO basic auth.
         try {
             $accept = $request->getHeaderLine("Accept");
             $postData = $request->getParsedBody();
@@ -68,7 +67,6 @@ class ApiController
      */
     public function merge(ServerRequestInterface $request)
     {
-        // TODO basic auth.
         try {
             $accept = $request->getHeaderLine("Accept");
             $postData = $request->getParsedBody();

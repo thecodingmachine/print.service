@@ -134,7 +134,7 @@ Also this API works with basic authentification. Please look at [API configurati
 
 ### Data properties
 
-
+TODO
 
 ### Media type exception
 
@@ -227,6 +227,7 @@ Go to http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticati
 
 This API use:
 
+* twig: http://twig.sensiolabs.org/ (twig to HTML)
 * PDFtk: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/ (merging PDF)
 * wkhtmltopdf: http://wkhtmltopdf.org/ (HTML to PDF)
 * LibreOffice: https://www.libreoffice.org/download/libreoffice-fresh/ (Word to PDF conversion with soffice command)
