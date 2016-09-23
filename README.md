@@ -76,6 +76,22 @@ Also this API works with basic authentification. Please look at [API configurati
 
 ## Rules
 
+### Templates properties
+
+* order: required
+* contentType: required
+* url: required
+* headerUrl: optional
+* footerUrl: optinal
+
+**Note:** the **headerUrl** and **footerUrl** are only available for twig templates.
+
+### Data properties
+
+
+
+### Media type exception
+
 Except for application/pdf, your accept header line must match your templates' content types.
 
 For example :
