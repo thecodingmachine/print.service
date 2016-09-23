@@ -42,12 +42,13 @@ class DocumentsHandler
      * @param FileService $fileService
      * @param string $mediaType
      * @param array $postData
+     * @param bool $isMerge
      * @throws MediaTypeException
      * @throws BadRequestException
      * @throws ContentTypeException
      * @throws \Exception
      */
-    public function __construct(FileService $fileService, string $mediaType, array $postData)
+    public function __construct(FileService $fileService, string $mediaType, array $postData, bool $isMerge = false)
     {
         if (empty($mediaType) || $mediaType == "*/*") {
             throw new MediaTypeException();
@@ -62,7 +63,7 @@ class DocumentsHandler
         $this->documents = [];
         
         // case: merge many documents
-        if (count(array_filter(array_keys($postData), "is_string")) > 0) {
+        if ($isMerge) {
 
             /** @var array $currentDocumentData */
             foreach ($postData as $currentDocumentData) {
@@ -255,6 +256,14 @@ class DocumentsHandler
     public function getFinalDocument(): \SplFileInfo
     {
         return $this->finalDocument;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
     }
 
 }

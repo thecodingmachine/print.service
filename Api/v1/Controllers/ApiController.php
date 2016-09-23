@@ -3,6 +3,7 @@ namespace Api\v1\Controllers;
 
 use Api\v1\Models\DocumentsHandler;
 use Api\v1\Services\FileService;
+use GuzzleHttp\Psr7\Response;
 use Mouf\Mvc\Splash\Annotations\Post;
 use Mouf\Mvc\Splash\Annotations\URL;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,7 +35,7 @@ class ApiController
      * @URL("api/v1/documents/generate")
      * @Post
      * @param ServerRequestInterface $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     public function generate(ServerRequestInterface $request)
     {
@@ -44,11 +45,7 @@ class ApiController
             $postData = $request->getParsedBody();
             $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
             $documentsHandler->generate();
-
-            // TODO return final document.
-
-            return new JsonResponse([ "message" => $documentsHandler->getFinalDocument() ]);
-
+            return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
                 "message" => $e->getMessage()
@@ -62,7 +59,7 @@ class ApiController
      * @URL("api/v1/documents/merge")
      * @Post
      * @param ServerRequestInterface $request
-     * @return JsonResponse
+     * @return JsonResponse|Response
      */
     public function merge(ServerRequestInterface $request)
     {
@@ -70,13 +67,9 @@ class ApiController
         try {
             $accept = $request->getHeaderLine("Accept");
             $postData = $request->getParsedBody();
-            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
+            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData, true);
             $documentsHandler->generate();
-
-            // TODO return final document.
-
-            return new JsonResponse([ "message" => $documentsHandler->getFinalDocument() ]);
-
+            return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
         } catch (\Exception $e) {
             $errorResponse = new JsonResponse([
                 "message" => $e->getMessage()

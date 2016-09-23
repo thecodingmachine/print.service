@@ -7,13 +7,9 @@ use Api\v1\Exceptions\MergingPdfException;
 use Api\v1\Exceptions\MergingWordDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
-use Doctrine\Common\Cache\FilesystemCache;
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Kevinrob\GuzzleCache\CacheMiddleware;
-use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
-use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
 use Mouf\Html\Renderer\Twig\TwigTemplate;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -54,10 +50,7 @@ class FileService
         $this->twigEnvironment = $twigEnvironment;
         $this->temporaryFilesFolder = new \SplFileInfo(ROOT_PATH . TEMPORARY_FILES_FOLDER);
         $this->fileSystem = new Filesystem();
-        $stack = HandlerStack::create();
-        $stack->push(new CacheMiddleware(new PrivateCacheStrategy(new DoctrineCacheStorage(new FilesystemCache($this->temporaryFilesFolder->getRealPath())))), "cache");
-        $this->client = new Client([ "handler" => $stack ]);
-
+        $this->client = new Client();
     }
 
     /**
@@ -79,11 +72,11 @@ class FileService
      */
     public function downloadFile(string $fileName, string $fileUrl): \SplFileInfo
     {
-        $filePath = $this->temporaryFilesFolder->getRealPath() . $fileName;
-        $file = new \SplFileObject($filePath, "w");
+        $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
+        $file = fopen($filePath, "w");
         $stream = \GuzzleHttp\Psr7\stream_for($file);
         $this->client->request("GET", $fileUrl, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
-        return $file->getFileInfo();
+        return new \SplFileInfo($filePath);
     }
 
     /**
@@ -98,7 +91,7 @@ class FileService
     {
         try {
             $twigTemplate = new TwigTemplate($this->twigEnvironment, $file->getRealPath(), $data);
-            $folderPath = $this->temporaryFilesFolder->getRealPath();
+            $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $populatedHtmlFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $populatedHtmlFile->fwrite($twigTemplate->getHtml());
             return $populatedHtmlFile->getFileInfo();
@@ -117,12 +110,12 @@ class FileService
      */
     public function populateWordDocument(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
     {
-        $folderPath = $this->temporaryFilesFolder->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
         $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/populateWordDocument.js");
         $nodeCommand = NODE_PATH . " " . $scriptFile->getRealPath() . " " . $file->getRealPath() . " " . json_encode($data) . " " . $folderPath . $resultFileName;
 
-        $process = new Process();
-        $process->run($nodeCommand);
+        $process = new Process($nodeCommand);
+        $process->run();
 
         if (!$process->isSuccessful()) {
             throw new UnprocessableEntityException($process->getErrorOutput());
@@ -142,7 +135,7 @@ class FileService
      */
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
-        $folderPath = $this->temporaryFilesFolder->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath(). "/";
         $wkhtmltopdfCommand = WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
@@ -155,8 +148,8 @@ class FileService
 
         $wkhtmltopdfCommand .= $body->getRealPath() . " " . $folderPath . $resultFileName;
 
-        $process = new Process();
-        $process->run($wkhtmltopdfCommand);
+        $process = new Process($wkhtmltopdfCommand);
+        $process->run();
 
         if (!$process->isSuccessful()) {
             throw new HtmlToPdfException();
@@ -174,11 +167,11 @@ class FileService
      */
     public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
-        $folderPath = $this->temporaryFilesFolder->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
         $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer -outdir "' . $folderPath . $resultFileName . '"';
 
-        $process = new Process();
-        $process->run($sofficeCommand);
+        $process = new Process($sofficeCommand);
+        $process->run();
 
         if (!$process->isSuccessful()) {
             throw new WordDocumentToPdfException();
@@ -196,7 +189,7 @@ class FileService
      */
     public function mergePdfFiles(array $pdfFilesToMerge, string $resultFileName): \SplFileInfo
     {
-        $folderPath = $this->temporaryFilesFolder->getRealPath();
+        $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
         $pdftkCommand = PDFTK_PATH . " ";
 
         /** @var \SplFileInfo $pdfFile */
@@ -206,8 +199,8 @@ class FileService
 
         $pdftkCommand .= "cat output " . $folderPath . $resultFileName;
 
-        $process = new Process();
-        $process->run($pdftkCommand);
+        $process = new Process($pdftkCommand);
+        $process->run();
 
         if (!$process->isSuccessful()) {
             throw new MergingPdfException();
@@ -228,7 +221,7 @@ class FileService
         try {
             $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig");
             $twigTemplate = new TwigTemplate($this->twigEnvironment, $scriptFile->getRealPath(), $htmlFilesToMerge);
-            $folderPath = $this->temporaryFilesFolder->getRealPath();
+            $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $resultFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $resultFile->fwrite($twigTemplate->getHtml());
             return $resultFile->getFileInfo();
@@ -254,10 +247,39 @@ class FileService
     }
 
     /**
-     * Removes a file from disk.
+     * Serves a file.
      * @param \SplFileInfo $file
+     * @param string $contentType
+     * @return Response
      */
-    public function removeFileFromDisk(\SplFileInfo $file)
+    public function serveFile(\SplFileInfo $file, string $contentType): Response
+    {
+        $attachedFile = fopen($file->getRealPath(), "r");
+        $stream = \GuzzleHttp\Psr7\stream_for($attachedFile);
+
+        var_dump($file->getRealPath());
+
+        $response = new Response();
+        $response->withHeader("Content-Description", "File Transfer");
+        $response->withHeader("Content-Type", $contentType);
+        $response->withHeader("Content-Disposition", "attachement; filename=" . $file->getBasename());
+        $response->withHeader("Content-Transfer-Encoding", "binary");
+        $response->withHeader("Expires", "0");
+        $response->withHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+        $response->withHeader("Pragma", "public");
+        $response->withHeader("Content-Length", $file->getSize());
+        $response->withBody($stream);
+
+        var_dump($response);
+
+        return $response;
+    }
+
+    /**
+     * Removes a file from disk.
+     * @param \SplFileInfo|null $file
+     */
+    public function removeFileFromDisk(\SplFileInfo $file = null)
     {
         if (!empty($file)) {
             if ($this->fileSystem->exists($file->getRealPath())) {

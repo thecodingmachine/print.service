@@ -23,7 +23,7 @@ class Document
     private $fileService;
 
     /**
-     * @var \SplPriorityQueue<AbstractTemplate>
+     * @var array<AbstractTemplate>
      */
     private $templates;
 
@@ -55,7 +55,7 @@ class Document
     public function __construct(FileService $fileService, array $data = null)
     {
         $this->fileService = $fileService;
-        $this->templates = new \SplPriorityQueue();
+        $this->templates = [];
         $this->data = $data;
         $this->formattedDataForHtml = [];
         $this->formattedDataForWordDocument = [];
@@ -70,7 +70,10 @@ class Document
      */
     public function addTemplate(AbstractTemplate $template)
     {
-        $this->templates->insert($template, $template->getOrder());
+        $this->templates[] = $template;
+        usort($this->templates, function(AbstractTemplate $templateA,  AbstractTemplate $templateB) {
+            return $templateA->getOrder() > $templateB->getOrder();
+        });
 
         if ($template->getContentType() == AbstractTemplate::HTML_CONTENT_TYPE && empty($this->formattedDataForHtml)) {
             $this->formattedDataForHtml = $this->formatDataForHtml($this->data);
@@ -252,9 +255,9 @@ class Document
     }
 
     /**
-     * @return \SplPriorityQueue<AbstractTemplate>
+     * @return array<AbstractTemplate>
      */
-    public function getTemplates(): \SplPriorityQueue
+    public function getTemplates(): array
     {
         return $this->templates;
     }

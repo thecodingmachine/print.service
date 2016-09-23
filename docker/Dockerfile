@@ -27,11 +27,13 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - && \
 
 # installs wkhtmltopdf
 RUN apt-get update && \
-    apt-get install -y wkhtmltopdf
+    apt-get install -y wkhtmltopdf && \
+    ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # installs  pdftk
 RUN apt-get update && \
-    apt-get install -y pdftk
+    apt-get install -y pdftk && \
+    ln -s /usr/bin/pdftk /usr/local/bin/pdftk
 
 # installs libreoffice
 RUN apt-get update && \
