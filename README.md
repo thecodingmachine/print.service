@@ -32,7 +32,7 @@ Move to the root directory of the project. You'll have to launch the following c
 ./bin/clean
 ```
 
-## Stop the containers:
+## Stop the container:
 
 ```
 ./bin/stop dev
