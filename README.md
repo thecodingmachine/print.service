@@ -309,7 +309,7 @@ Allows to generate many documents and merge them into one final document.
 
 ## API configuration
 
-### Defining user(s) for HTTP basic authentification
+### Defining user(s) for HTTP basic authentication
 
 Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and update the options parameter.
     
