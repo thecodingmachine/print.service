@@ -2,6 +2,42 @@
 
 Simple API for generating documents according to various types of templates (.twig, .docx, .pdf) and a set of data.
 
+# Setting up your development environment
+
+Move to the root directory of the project. You'll have to launch the following commands:
+
+## Install php packages using:
+
+```
+./bin/composer $(pwd) install
+```
+
+## Build the docker container:
+
+```
+./bin/build $(pwd) dev
+```
+
+## Start the docker container:
+
+```
+./bin/up $(pwd) dev
+```
+
+# Candies
+
+## Clean your docker cache:
+
+```
+./bin/clean
+```
+
+## Stop the containers:
+
+```
+./bin/stop dev
+```
+
 # API
 
 ## Request headers
@@ -22,7 +58,7 @@ A PDF document output:
 
 **Accept:** application/pdf
 
-Also this API works with basic authentification. Please look at [API configuration](#api-configuration)!
+Also this API works with basic authentification. Please look at [API configuration](##api-configuration)!
 
 ## Single document JSON
 
@@ -81,8 +117,8 @@ Also this API works with basic authentification. Please look at [API configurati
 * order: required
 * contentType: required
 * url: required
-* headerUrl: optional
-* footerUrl: optinal
+* headerUrl: _optional_
+* footerUrl: _optional_
 
 **Note:** the **headerUrl** and **footerUrl** are only available for twig templates.
 
@@ -171,13 +207,13 @@ Allows to generate many documents and merge them into one final document.
 ]
 ```
 
-# API configuration
+## API configuration
 
-## Defining user(s) for HTTP basic authentification
+### Defining user(s) for HTTP basic authentification
 
 Go to http://yourdomain.com/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware and updates the options parameter.
 
-# API stack
+## API stack
 
 This API use:
 
@@ -189,3 +225,17 @@ This API use:
     * https://github.com/prog666/docxtemplater-chart-module (module for populating charts of a word template)
     * https://github.com/open-xml-templating/docxtemplater-image-module (module for images charts of a word template)
     * https://github.com/sujith3g/docxtemplater-link-module (module for populating links of a word template)
+    
+# Known issues
+    
+## The docker container is not running
+    
+You might have to stop your local apache.
+    
+## I've some permissions issues in Mouf
+    
+You might have to stop the container (`./bin/stop dev`) and start it again (`/bin/up $(pwd) dev`).
+
+## I can't generate a Word document with many Word templates
+
+Yep, this is currently a limitation. For now, you are only able to generate one Word document with one Word template.
