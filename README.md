@@ -70,6 +70,18 @@ A PDF document output:
 
 Also this API works with basic authentification. Please look at [API configuration](#api-configuration)!
 
+## API stack
+
+* twig: <http://twig.sensiolabs.org/> (twig to HTML)
+* PDFtk: <https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/> (merging PDF)
+* wkhtmltopdf: <http://wkhtmltopdf.org/> (HTML to PDF)
+* LibreOffice: <https://www.libreoffice.org/download/libreoffice-fresh/> (Word to PDF conversion with soffice command)
+* Node 4_x with the following libraries:
+    * <https://github.com/open-xml-templating/docxtemplater> (for populating a word template)
+    * <https://github.com/prog666/docxtemplater-chart-module> (module for populating charts of a word template)
+    * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images charts of a word template)
+    * <https://github.com/sujith3g/docxtemplater-link-module> (module for populating links of a word template)
+
 ## Single document JSON
 
 ```json
@@ -134,7 +146,79 @@ Also this API works with basic authentification. Please look at [API configurati
 
 ### Data properties
 
-TODO
+The data object is optional. Except for image and link special cases (see below), as long as the JSON is valid the API will be able to populate your templates.
+
+### Populating templates
+
+#### Twig template
+
+Considering this data object:
+
+```json
+"data": {
+    "property1": "value",
+    "image": {
+        "type": "image",
+        "url": "http://adomaine.com/yourimage.png"
+    },
+    "link": {
+        "type": "link",
+        "text": "yourtextlink",
+        "url": "http//adomain.com"
+    }
+}
+```
+
+Your twig template will be filled using:
+
+```php
+<?php
+[
+    "property1" => "value",
+    "image" => [
+        "url" => "http://adomaine.com/yourimage.png"
+    ],
+    "link" => [
+        "text" => "yourtextlink",
+        "url" => "http//adomain.com"
+    ]
+];
+?>
+```
+
+#### Word template
+
+Considering this data object:
+
+```json
+"data": {
+    "property1": "value",
+    "image": {
+        "type": "image",
+        "url": "http://adomaine.com/yourimage.png"
+    },
+    "link": {
+        "type": "link",
+        "text": "yourtextlink",
+        "url": "http//adomain.com"
+    }
+}
+```
+
+Your Word template will be filled using:
+
+```json
+{
+    "property1": "value",
+    "image": "yourimagerealpath.png",
+    "link": {
+        "text": "yourtextlink",
+        "url": "http//adomain.com"
+    }
+}
+```
+
+**Note:** as you can see, the image specified in the original JSON has been downloaded by the API, because of a limitation of the docx templater image module which is not able to work with remote files.
 
 ### Media type exception
 
@@ -222,20 +306,8 @@ Allows to generate many documents and merge them into one final document.
 ### Defining user(s) for HTTP basic authentification
 
 Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and update the options parameter.
-
-## API stack
-
-* twig: <http://twig.sensiolabs.org/> (twig to HTML)
-* PDFtk: <https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/> (merging PDF)
-* wkhtmltopdf: <http://wkhtmltopdf.org/> (HTML to PDF)
-* LibreOffice: <https://www.libreoffice.org/download/libreoffice-fresh/> (Word to PDF conversion with soffice command)
-* Node 4_x with the following libraries:
-    * <https://github.com/open-xml-templating/docxtemplater> (for populating a word template)
-    * <https://github.com/prog666/docxtemplater-chart-module> (module for populating charts of a word template)
-    * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images charts of a word template)
-    * <https://github.com/sujith3g/docxtemplater-link-module> (module for populating links of a word template)
     
-# Known issues
+# FAQ / Known issues
     
 ## The docker container is not running
     
