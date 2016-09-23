@@ -30,7 +30,9 @@ Move to the root directory of the project. You'll have to launch the following c
 ./bin/up $(pwd) dev
 ```
 
-## Last but not least, install Mouf framework: <http://localhost/vendor/mouf/mouf>
+## Last but not least
+ 
+Install Mouf framework: http://localhost/vendor/mouf/mouf
 
 # Candies
 
