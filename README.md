@@ -22,7 +22,7 @@ A PDF document output:
 
 **Accept:** application/pdf
 
-Also this API works with basic authentification. Please look at [API configuration](#API-configuration)
+Also this API works with basic authentification. Please look at [API configuration](#api-configuration)!
 
 ## Single document JSON
 
