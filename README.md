@@ -4,6 +4,12 @@ Simple API for generating documents according to various types of templates (.tw
 
 # Setting up your development environment
 
+## Docker, docker-compose
+
+Install Docker (**>= 1.10**) for MacOSX / Linux following the official instructions: <https://docs.docker.com/engine/installation/>
+
+Install docker-compose (**>= 1.8.0**) for MacOSX / Linux following the official instructions: <https://docs.docker.com/compose/install/>
+
 Move to the root directory of the project. You'll have to launch the following commands:
 
 ## Install php packages using:
@@ -23,6 +29,8 @@ Move to the root directory of the project. You'll have to launch the following c
 ```
 ./bin/up $(pwd) dev
 ```
+
+## Last but not least, install Mouf framework: <http://localhost/vendor/mouf/mouf>
 
 # Candies
 
@@ -58,7 +66,7 @@ A PDF document output:
 
 **Accept:** application/pdf
 
-Also this API works with basic authentification. Please look at [API configuration](##api-configuration)!
+Also this API works with basic authentification. Please look at [API configuration](#api-configuration)!
 
 ## Single document JSON
 
@@ -211,7 +219,7 @@ Allows to generate many documents and merge them into one final document.
 
 ### Defining user(s) for HTTP basic authentification
 
-Go to http://yourdomain.com/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware and updates the options parameter.
+Go to http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware and updates the options parameter.
 
 ## API stack
 
