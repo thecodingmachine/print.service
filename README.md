@@ -107,7 +107,7 @@ For example :
 }
 ```
 
-This request will throw an exception if you are requesitng a HTML or a Word document output.
+This request will throw an exception if you are requesting a HTML or a Word document output.
 
 ## /api/v1/generate
 
