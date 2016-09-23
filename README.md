@@ -1,6 +1,6 @@
 # Goals
 
-Simple API for generating documents according to various types of tempaltes (.twig, .docx, .pdf) and a set of data.
+Simple API for generating documents according to various types of templates (.twig, .docx, .pdf) and a set of data.
 
 # API
 
