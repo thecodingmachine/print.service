@@ -175,9 +175,7 @@ Your twig template will be filled using:
 <?php
 [
     "property1" => "value",
-    "image" => [
-        "url" => "http://adomaine.com/yourimage.png"
-    ],
+    "image" => "http://adomaine.com/yourimage.png",
     "link" => [
         "text" => "yourtextlink",
         "url" => "http//adomain.com"
