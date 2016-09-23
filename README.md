@@ -132,6 +132,14 @@ Also this API works with basic authentification. Please look at [API configurati
 }
 ```
 
+## How does it work?
+
+1. Parse the request
+2. Download the templates (**note:** the API uses a cache to detect if the templates must be downloaded again; when retrieving a template, the cache will check for the Expire header line.)
+3. Populate the templates according to the data
+4. Merge templates into one final document
+5. Serve the final document
+
 ## Rules
 
 ### Templates properties
