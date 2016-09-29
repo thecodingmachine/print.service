@@ -65,7 +65,9 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     function __destruct()
     {
         $this->fileService->removeFileFromDisk($this->populatedHeaderTemplate);
+        $this->fileService->removeFileFromDisk($this->headerTemplate);
         $this->fileService->removeFileFromDisk($this->populatedFooterTemplate);
+        $this->fileService->removeFileFromDisk($this->footerTemplate);
         parent::__destruct();
     }
 
