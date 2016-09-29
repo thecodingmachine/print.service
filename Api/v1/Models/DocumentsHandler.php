@@ -192,9 +192,9 @@ class DocumentsHandler
             /** @var HtmlTemplate $currentTemplate */
             foreach ($currentTemplates as $currentTemplate) {
                 $htmlFilesToMerge[] = [
-                    "header" => $currentTemplate->getPopulatedHeaderTemplate(),
-                    "body" => $currentTemplate->getPopulatedTemplate(),
-                    "footer" => $currentTemplate->getPopulatedFooterTemplate()
+                    "header" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedHeaderTemplate()->getFilename()),
+                    "body" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedTemplate()->getFilename()),
+                    "footer" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedFooterTemplate()->getFilename())
                 ];
             }
         }

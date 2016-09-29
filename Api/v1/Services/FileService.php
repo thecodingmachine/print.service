@@ -107,7 +107,7 @@ class FileService
     public function populateTwigFile(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
     {
         try {
-            $twigTemplate = new TwigTemplate($this->twigEnvironment, $file->getRealPath(), $data);
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, $this->getTemporaryFilepath($file->getFilename()), $data);
             $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $populatedHtmlFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $populatedHtmlFile->fwrite($twigTemplate->getHtml());
@@ -236,8 +236,7 @@ class FileService
     public function mergeHtmlFiles(array $htmlFilesToMerge, string $resultFileName): \SplFileInfo
     {
         try {
-            $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig");
-            $twigTemplate = new TwigTemplate($this->twigEnvironment, $scriptFile->getRealPath(), $htmlFilesToMerge);
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, "Api/v1/Scripts/mergeHtml.twig", ["htmlTemplates" => $htmlFilesToMerge]);
             $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $resultFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $resultFile->fwrite($twigTemplate->getHtml());
@@ -303,4 +302,11 @@ class FileService
         }
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
+    public function getTemporaryFilepath($filename){
+        return $this->temporaryFilesFolder->getFilename() . '/' . $filename;
+    }
 }
