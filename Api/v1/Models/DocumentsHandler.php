@@ -191,10 +191,13 @@ class DocumentsHandler
 
             /** @var HtmlTemplate $currentTemplate */
             foreach ($currentTemplates as $currentTemplate) {
+                $headerTemplate = $currentTemplate->getPopulatedHeaderTemplate();
+                $bodyTemplate = $currentTemplate->getPopulatedTemplate();
+                $footerTemplate = $currentTemplate->getPopulatedFooterTemplate();
                 $htmlFilesToMerge[] = [
-                    "header" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedHeaderTemplate()->getFilename()),
-                    "body" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedTemplate()->getFilename()),
-                    "footer" => $this->fileService->getTemporaryFilepath($currentTemplate->getPopulatedFooterTemplate()->getFilename())
+                    "header" => $headerTemplate === null ? null : $this->fileService->getTemporaryFilepath($headerTemplate->getFilename()),
+                    "body" => $this->fileService->getTemporaryFilepath($bodyTemplate->getFilename()),
+                    "footer" => $footerTemplate === null ? null : $this->fileService->getTemporaryFilepath($footerTemplate->getFilename())
                 ];
             }
         }

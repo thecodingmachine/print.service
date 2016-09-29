@@ -114,33 +114,33 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getHeaderTemplate(): \SplFileInfo
+    public function getHeaderTemplate()
     {
         return $this->headerTemplate;
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getPopulatedHeaderTemplate(): \SplFileInfo
+    public function getPopulatedHeaderTemplate()
     {
         return $this->populatedHeaderTemplate;
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getFooterTemplate(): \SplFileInfo
+    public function getFooterTemplate()
     {
         return $this->footerTemplate;
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getPopulatedFooterTemplate(): \SplFileInfo
+    public function getPopulatedFooterTemplate()
     {
         return $this->populatedFooterTemplate;
     }
