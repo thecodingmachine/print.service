@@ -107,7 +107,7 @@ class DocumentsHandler
         /** @var array $currentTemplateData */
         foreach ($templatesData as $currentTemplateData) {
 
-            if (!isset($currentTemplateData["order"]) || empty($currentTemplateData["order"]) || !isset($currentTemplateData["contentType"]) || empty($currentTemplateData["contentType"]) || !isset($currentTemplateData["url"]) || empty($currentTemplateData["url"])) {
+            if (!isset($currentTemplateData["order"]) || !is_int($currentTemplateData["order"]) || !isset($currentTemplateData["contentType"]) || empty($currentTemplateData["contentType"]) || !isset($currentTemplateData["url"]) || empty($currentTemplateData["url"])) {
                 throw new BadRequestException();
             }
 
@@ -120,8 +120,8 @@ class DocumentsHandler
                     if ($this->mediaType == AbstractTemplate::WORD_CONTENT_TYPE) {
                         throw new MediaTypeException();
                     }
-                    $headerTemplateUrl = isset($template["headerUrl"]) && !empty($template["headerUrl"]) ? $template["headerUrl"] : null;
-                    $footerTemplateUrl = isset($template["footerUrl"]) && !empty($template["footerUrl"]) ? $template["footerUrl"] : null;
+                    $headerTemplateUrl = isset($currentTemplateData["headerUrl"]) && !empty($currentTemplateData["headerUrl"]) ? $currentTemplateData["headerUrl"] : null;
+                    $footerTemplateUrl = isset($currentTemplateData["footerUrl"]) && !empty($currentTemplateData["footerUrl"]) ? $currentTemplateData["footerUrl"] : null;
                     $document->addTemplate(new HtmlTemplate($this->fileService, $order, $templateUrl, $headerTemplateUrl, $footerTemplateUrl));
                     break;
                 case AbstractTemplate::WORD_CONTENT_TYPE:

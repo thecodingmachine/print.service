@@ -122,9 +122,9 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     }
 
     /**
-     * @return mixed
+     * @return \SplFileInfo
      */
-    public function getPopulatedHeaderTemplate()
+    public function getPopulatedHeaderTemplate(): \SplFileInfo
     {
         return $this->populatedHeaderTemplate;
     }
