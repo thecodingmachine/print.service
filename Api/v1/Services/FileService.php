@@ -89,11 +89,24 @@ class FileService
      */
     public function downloadFile(string $fileName, string $fileUrl): \SplFileInfo
     {
-        $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
-        $file = fopen($filePath, "w");
-        $stream = \GuzzleHttp\Psr7\stream_for($file);
-        $this->client->request("GET", $fileUrl, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
-        return new \SplFileInfo($filePath);
+        $fileDest = $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
+        $fp = fopen($fileDest, 'w');
+        $ch = curl_init($fileUrl);
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+
+        $ok = curl_exec($ch);
+
+        curl_close($ch);
+        fclose($fp);
+
+        if ($ok === false)
+        {
+            $this->removeFileFromDisk(new \SplFileInfo($fileDest));
+            throw new \Exception("Could not retrieve file: $fileUrl");
+        }
+
+        return new \SplFileInfo($fileDest);
     }
 
     /**
