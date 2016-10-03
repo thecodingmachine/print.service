@@ -113,13 +113,13 @@ class Document
                         if (isset($currentData["text"]) && empty($currentData["text"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = isset($currentData["text"]) ? ["text" => $currentData["text"], "url" => $currentData["url"]] : $currentData["url"];
+                        $formattedData[$key] = isset($currentData["text"]) ? ["text" => $currentData["text"], "url" => $currentData["url"]] : $currentData["url"];
                         break;
                     case Document::IMAGE_DATA_TYPE:
                         if (!isset($currentData["url"]) || empty($currentData["url"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = $currentData["url"];
+                        $formattedData[$key] = $currentData["url"];
                         break;
                     default:
                         throw new BadRequestException();
@@ -165,14 +165,14 @@ class Document
                         if (isset($currentData["text"]) && empty($currentData["text"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
+                        $formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
                         break;
                     case Document::IMAGE_DATA_TYPE:
                         if (!isset($currentData["url"]) || empty($currentData["url"])) {
                             throw new BadRequestException();
                         }
                         $file = $this->downloadImage($currentData["url"]);
-                        $this->$formattedData[$key] = $file->getRealPath();
+                        $formattedData[$key] = $file->getRealPath();
                         break;
                     default:
                         throw new BadRequestException();
@@ -195,7 +195,7 @@ class Document
     private function downloadImage(string $url): \SplFileInfo
     {
         // TODO check file ext.
-        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url);
+        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url, true);
         $images[] = $file;
 
         return $file;
