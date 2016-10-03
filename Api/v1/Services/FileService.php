@@ -160,7 +160,7 @@ class FileService
         }
 
         if (!empty($footer)) {
-            $wkhtmltopdfCommand .= "--footer-html " . $footer->getRealPath() . " --margin-bottm 15mm --footer-spacing -3 ";
+            $wkhtmltopdfCommand .= "--footer-html " . $footer->getRealPath() . " --margin-bottom 15mm --footer-spacing -3 ";
         }
 
         $wkhtmltopdfCommand .= $body->getRealPath() . " " . $folderPath . $resultFileName;
