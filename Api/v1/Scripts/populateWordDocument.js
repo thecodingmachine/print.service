@@ -64,8 +64,8 @@ imageOptions.getImage=function(tagValue, tagName) {
     return fs.readFileSync(tagValue, 'binary');
 };
 
-imageOptions.getSize = function(image) {
-    var sizeObj = sizeOf(image);
+imageOptions.getSize = function(image, tagValue, tagName) {
+    var sizeObj = sizeOf(tagValue);
     return [ sizeObj.width, sizeObj.height ];
 };
 
