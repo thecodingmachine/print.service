@@ -84,12 +84,18 @@ class FileService
      * Downloads a file.
      * @param $fileName
      * @param string $fileUrl
+     * @param bool $appendExtension
      * @return \SplFileInfo
      * @throws \Exception
      */
-    public function downloadFile(string $fileName, string $fileUrl): \SplFileInfo
+    public function downloadFile(string $fileName, string $fileUrl, bool $appendExtension = false): \SplFileInfo
     {
         $fileDest = $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
+        if ($appendExtension)
+        {
+            $fileDest = $fileDest . '.' . $this->getFileExtension($fileUrl);
+        }
+
         $fp = fopen($fileDest, 'w');
         $ch = curl_init($fileUrl);
 
@@ -107,6 +113,23 @@ class FileService
         }
 
         return new \SplFileInfo($fileDest);
+    }
+
+    /**
+     * @param string $fileUrl
+     * @return string
+     */
+    public function getFileExtension(string $fileUrl)
+    {
+        $extensionFromPath = pathinfo($fileUrl, PATHINFO_EXTENSION);
+        if ($extensionFromPath != "")
+            return $extensionFromPath;
+
+        $headers = get_headers($fileUrl, 1);
+        if ($headers === false || !isset($headers["Content-Type"]))
+            return false;
+        $contentType = $headers["Content-Type"];
+        return MimeType::getExtensionFromMimetype($contentType);
     }
 
     /**
