@@ -85,10 +85,10 @@ class FileService
      * @param $fileName
      * @param string $fileUrl
      * @param bool $appendExtension
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      * @throws \Exception
      */
-    public function downloadFile(string $fileName, string $fileUrl, bool $appendExtension = false): \SplFileInfo
+    public function downloadFile(string $fileName, string $fileUrl, bool $appendExtension = false)
     {
         $fileDest = $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
         if ($appendExtension)
@@ -100,16 +100,18 @@ class FileService
         $ch = curl_init($fileUrl);
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
 
         $ok = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
         fclose($fp);
 
-        if ($ok === false)
+        if ($ok === false || $status != 200 || filesize($fileDest) === 0)
         {
             $this->removeFileFromDisk(new \SplFileInfo($fileDest));
-            throw new \Exception("Could not retrieve file: $fileUrl");
+            return null;
         }
 
         return new \SplFileInfo($fileDest);
