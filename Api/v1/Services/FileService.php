@@ -131,7 +131,7 @@ class FileService
         if ($headers === false || !isset($headers["Content-Type"]))
             return false;
         $contentType = $headers["Content-Type"];
-        return MimeType::getExtensionFromMimetype($contentType);
+        return MimeTypeService::getExtensionFromMimetype($contentType);
     }
 
     /**
