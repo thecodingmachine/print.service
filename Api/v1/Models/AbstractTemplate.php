@@ -89,7 +89,7 @@ abstract class AbstractTemplate
     {
         $this->template = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->templateUrl);
         if ($this->template === null)
-            throw new FileNotFoundException('impossible de charger les templates distants fournis dans la requête', 404);
+            throw new FileNotFoundException('unable to download remote templates.', 404);
     }
 
     /**
