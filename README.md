@@ -79,7 +79,7 @@ Also this API works with basic authentication. Please look at [API configuration
 * Node 4_x with the following libraries:
     * <https://github.com/open-xml-templating/docxtemplater> (for populating a word template)
     * <https://github.com/prog666/docxtemplater-chart-module> (module for populating charts of a word template)
-    * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images charts of a word template)
+    * <https://github.com/open-xml-templating/docxtemplater-image-module> (module for images of a word template)
     * <https://github.com/sujith3g/docxtemplater-link-module> (module for populating links of a word template)
 
 ## Example of a JSON for a single document
