@@ -76,6 +76,11 @@ abstract class AbstractTemplate
         }
     }
 
+    public function __destruct()
+    {
+        $this->fileService->removeFileFromDisk($this->template);
+    }
+
     /**
      * Downloads the template.
      * @throws \Exception
