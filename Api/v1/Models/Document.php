@@ -6,6 +6,7 @@ use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
 use Api\v1\Services\FileService;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class Document
@@ -194,9 +195,10 @@ class Document
      */
     private function downloadImage(string $url): \SplFileInfo
     {
-        // TODO check file ext.
         $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url, true);
-        $images[] = $file;
+        if ($file === null){
+            throw new FileNotFoundException("unable to download remote image '$url'", 404);
+        }
 
         return $file;
     }
