@@ -108,7 +108,7 @@ class FileService
         curl_close($ch);
         fclose($fp);
 
-        if ($ok === false || $status != 200 || filesize($fileDest) === 0)
+        if ($ok === false || $status >= 400 || filesize($fileDest) === 0)
         {
             $this->removeFileFromDisk(new \SplFileInfo($fileDest));
             return null;
