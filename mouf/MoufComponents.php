@@ -50,6 +50,12 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => '',
   ),
+  'XVFB_PATH' => 
+  array (
+    'defaultValue' => '/usr/local/bin/xvfb-run',
+    'type' => 'string',
+    'comment' => 'path to xvfb-run executable',
+  ),
 ));
 
 $moufManager->setAllVariables(array (

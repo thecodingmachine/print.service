@@ -191,7 +191,7 @@ class FileService
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath(). "/";
-        $wkhtmltopdfCommand = WKHTMLTOPDF_PATH . " ";
+        $wkhtmltopdfCommand = XVFB_PATH . " " . WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
             $wkhtmltopdfCommand .= "--header-html " . $header->getRealPath() . " --header-spacing 3 ";
