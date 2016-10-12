@@ -207,7 +207,7 @@ class FileService
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new HtmlToPdfException();
+            throw new HtmlToPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);
