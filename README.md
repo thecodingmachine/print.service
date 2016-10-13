@@ -321,7 +321,7 @@ You might have to stop your local apache.
     
 ## I've some permissions issues in Mouf
     
-You might have to stop the container (`./bin/stop dev`) and start it again (`/bin/up $(pwd) dev`).
+You might have to stop the container (`./bin/stop`) and start it again (`/bin/up $(pwd)`).
 
 ## I can't generate a Word document with many Word templates
 
