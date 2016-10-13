@@ -1,10 +1,8 @@
 FROM php:7-apache
 
 # installs missing php dependencies
-RUN pecl install apcu-5.1.5 && \
-    pecl install xdebug-2.4.0 # (dev environment only!)
-
-ADD ext-xdebug.ini /usr/local/etc/php/conf.d/ext-xdebug.ini
+RUN pecl install apcu-5.1.6 && \
+    pecl install xdebug-2.4.1 # (dev environment only!)
 
 RUN apt-get update && \
     apt-get install -y zlib1g-dev # dependency for php zip extension

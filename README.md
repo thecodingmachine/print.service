@@ -2,7 +2,7 @@
 
 Simple API for generating documents according to various types of templates (.twig, .docx, .pdf) and a set of data.
 
-# Setting up your development environment
+# Setting up your environment
 
 ## Docker, docker-compose
 
@@ -21,13 +21,13 @@ Move to the root directory of the project. You'll have to launch the following c
 ## Build the docker container:
 
 ```
-./bin/build $(pwd) dev
+./bin/build $(pwd)
 ```
 
 ## Start the docker container:
 
 ```
-./bin/up $(pwd) dev
+./bin/up $(pwd)
 ```
 
 ## Last but not least
@@ -45,7 +45,7 @@ Install Mouf framework: <http://localhost/vendor/mouf/mouf>
 ## Stop the container:
 
 ```
-./bin/stop dev
+./bin/stop
 ```
 
 # API
