@@ -223,13 +223,13 @@ class FileService
     public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
-        $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer -outdir "' . $folderPath . $resultFileName . '"';
+        $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer --outdir "' . $folderPath . $resultFileName . '"';
 
         $process = new Process($sofficeCommand);
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new WordDocumentToPdfException();
+            throw new WordDocumentToPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);

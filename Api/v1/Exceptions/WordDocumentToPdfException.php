@@ -10,11 +10,12 @@ class WordDocumentToPdfException extends \Exception
 
     /**
      * WordDocumentToPdfException constructor.
+     * @var string $details
      */
-    public function __construct()
+    public function __construct(string $details)
     {
         $this->code = 500;
-        $this->message =  "Word document to PDF exception: failed to convert the Word document.";
+        $this->message =  "Word document to PDF exception: failed to convert the Word document. Details: $details";
     }
 
 }
