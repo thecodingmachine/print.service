@@ -1,5 +1,13 @@
 #!/usr/bin/with-contenv sh
 
+if ! [ -d "/home/www-data" ]; then
+    mkdir -p "/home/www-data"
+    chown -R www-data:www-data "/home/www-data"
+    echo "setting up apache user directory"
+else
+    echo "home directory for apache user already set"
+fi
+
 cd /var/www/html;
 npm install;
 exec /usr/sbin/apachectl -DFOREGROUND;

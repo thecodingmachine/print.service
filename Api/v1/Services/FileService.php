@@ -223,9 +223,9 @@ class FileService
     public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
-        $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer --outdir "' . $folderPath . $resultFileName . '"';
+        $unoconvCommand ="HOME=".APACHE_HOME_DIR. " " . UNOCONV_PATH . ' --format pdf --output "' . $folderPath . $resultFileName . '" "' . $wordDocument->getRealPath() . '"';
 
-        $process = new Process($sofficeCommand);
+        $process = new Process($unoconvCommand);
         $process->run();
 
         if (!$process->isSuccessful()) {
