@@ -84,16 +84,54 @@ class FileService
      * Downloads a file.
      * @param $fileName
      * @param string $fileUrl
-     * @return \SplFileInfo
+     * @param bool $appendExtension
+     * @return \SplFileInfo|null
      * @throws \Exception
      */
-    public function downloadFile(string $fileName, string $fileUrl): \SplFileInfo
+    public function downloadFile(string $fileName, string $fileUrl, bool $appendExtension = false)
     {
-        $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
-        $file = fopen($filePath, "w");
-        $stream = \GuzzleHttp\Psr7\stream_for($file);
-        $this->client->request("GET", $fileUrl, [ RequestOptions::SINK => $stream, RequestOptions::SYNCHRONOUS => true ]);
-        return new \SplFileInfo($filePath);
+        $fileDest = $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
+        if ($appendExtension)
+        {
+            $fileDest = $fileDest . '.' . $this->getFileExtension($fileUrl);
+        }
+
+        $fp = fopen($fileDest, 'w');
+        $ch = curl_init($fileUrl);
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+
+        $ok = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+        fclose($fp);
+
+        if ($ok === false || $status >= 400 || filesize($fileDest) === 0)
+        {
+            $this->removeFileFromDisk(new \SplFileInfo($fileDest));
+            return null;
+        }
+
+        return new \SplFileInfo($fileDest);
+    }
+
+    /**
+     * @param string $fileUrl
+     * @return string
+     */
+    public function getFileExtension(string $fileUrl)
+    {
+        $extensionFromPath = pathinfo($fileUrl, PATHINFO_EXTENSION);
+        if ($extensionFromPath != "")
+            return $extensionFromPath;
+
+        $headers = get_headers($fileUrl, 1);
+        if ($headers === false || !isset($headers["Content-Type"]))
+            return false;
+        $contentType = $headers["Content-Type"];
+        return MimeTypeService::getExtensionFromMimetype($contentType);
     }
 
     /**
@@ -107,7 +145,7 @@ class FileService
     public function populateTwigFile(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
     {
         try {
-            $twigTemplate = new TwigTemplate($this->twigEnvironment, $file->getRealPath(), $data);
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, $this->getTemporaryFilepath($file->getFilename()), $data);
             $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $populatedHtmlFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $populatedHtmlFile->fwrite($twigTemplate->getHtml());
@@ -129,7 +167,7 @@ class FileService
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
         $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/populateWordDocument.js");
-        $nodeCommand = NODE_PATH . " " . $scriptFile->getRealPath() . " " . $file->getRealPath() . " " . json_encode($data) . " " . $folderPath . $resultFileName;
+        $nodeCommand = NODE_PATH . " " . $scriptFile->getRealPath() . " " . $file->getRealPath() . " " . escapeshellarg(json_encode($data)) . " " . $folderPath . $resultFileName;
 
         $process = new Process($nodeCommand);
         $process->run();
@@ -153,7 +191,7 @@ class FileService
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath(). "/";
-        $wkhtmltopdfCommand = WKHTMLTOPDF_PATH . " ";
+        $wkhtmltopdfCommand = XVFB_PATH . " " . WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
             $wkhtmltopdfCommand .= "--header-html " . $header->getRealPath() . " --header-spacing 3 ";
@@ -169,7 +207,7 @@ class FileService
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new HtmlToPdfException();
+            throw new HtmlToPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);
@@ -236,8 +274,7 @@ class FileService
     public function mergeHtmlFiles(array $htmlFilesToMerge, string $resultFileName): \SplFileInfo
     {
         try {
-            $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/mergeHtml.twig");
-            $twigTemplate = new TwigTemplate($this->twigEnvironment, $scriptFile->getRealPath(), $htmlFilesToMerge);
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, "Api/v1/Scripts/mergeHtml.twig", ["htmlTemplates" => $htmlFilesToMerge]);
             $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
             $resultFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $resultFile->fwrite($twigTemplate->getHtml());
@@ -303,4 +340,11 @@ class FileService
         }
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
+    public function getTemporaryFilepath($filename){
+        return $this->temporaryFilesFolder->getFilename() . '/' . $filename;
+    }
 }

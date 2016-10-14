@@ -65,7 +65,9 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     function __destruct()
     {
         $this->fileService->removeFileFromDisk($this->populatedHeaderTemplate);
+        $this->fileService->removeFileFromDisk($this->headerTemplate);
         $this->fileService->removeFileFromDisk($this->populatedFooterTemplate);
+        $this->fileService->removeFileFromDisk($this->footerTemplate);
         parent::__destruct();
     }
 
@@ -114,15 +116,15 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getHeaderTemplate(): \SplFileInfo
+    public function getHeaderTemplate()
     {
         return $this->headerTemplate;
     }
 
     /**
-     * @return mixed
+     * @return \SplFileInfo|null
      */
     public function getPopulatedHeaderTemplate()
     {
@@ -130,17 +132,17 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getFooterTemplate(): \SplFileInfo
+    public function getFooterTemplate()
     {
         return $this->footerTemplate;
     }
 
     /**
-     * @return \SplFileInfo
+     * @return \SplFileInfo|null
      */
-    public function getPopulatedFooterTemplate(): \SplFileInfo
+    public function getPopulatedFooterTemplate()
     {
         return $this->populatedFooterTemplate;
     }

@@ -28,6 +28,11 @@ RUN apt-get update && \
     apt-get install -y wkhtmltopdf && \
     ln -s /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
+# installs xvfb
+RUN apt-get update && \
+    apt-get install -y xvfb && \
+    ln -s /usr/bin/xvfb-run /usr/local/bin/xvfb-run
+
 # installs  pdftk
 RUN apt-get update && \
     apt-get install -y pdftk && \

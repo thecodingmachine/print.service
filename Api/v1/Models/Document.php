@@ -6,6 +6,7 @@ use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
 use Api\v1\Services\FileService;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class Document
@@ -113,13 +114,13 @@ class Document
                         if (isset($currentData["text"]) && empty($currentData["text"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = isset($currentData["text"]) ? ["text" => $currentData["text"], "url" => $currentData["url"]] : $currentData["url"];
+                        $formattedData[$key] = isset($currentData["text"]) ? ["text" => $currentData["text"], "url" => $currentData["url"]] : $currentData["url"];
                         break;
                     case Document::IMAGE_DATA_TYPE:
                         if (!isset($currentData["url"]) || empty($currentData["url"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = $currentData["url"];
+                        $formattedData[$key] = $currentData["url"];
                         break;
                     default:
                         throw new BadRequestException();
@@ -165,14 +166,14 @@ class Document
                         if (isset($currentData["text"]) && empty($currentData["text"])) {
                             throw new BadRequestException();
                         }
-                        $this->$formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
+                        $formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
                         break;
                     case Document::IMAGE_DATA_TYPE:
                         if (!isset($currentData["url"]) || empty($currentData["url"])) {
                             throw new BadRequestException();
                         }
                         $file = $this->downloadImage($currentData["url"]);
-                        $this->$formattedData[$key] = $file->getRealPath();
+                        $formattedData[$key] = $file->getRealPath();
                         break;
                     default:
                         throw new BadRequestException();
@@ -194,9 +195,10 @@ class Document
      */
     private function downloadImage(string $url): \SplFileInfo
     {
-        // TODO check file ext.
-        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url);
-        $images[] = $file;
+        $file = $this->fileService->downloadFile($this->fileService->generateRandomFileName(), $url, true);
+        if ($file === null){
+            throw new FileNotFoundException("unable to download remote image '$url'", 404);
+        }
 
         return $file;
     }

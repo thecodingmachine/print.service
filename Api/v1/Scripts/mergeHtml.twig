@@ -2,15 +2,15 @@
 
         {% if htmlTemplate["header"] is not null %}
 
-            {% include htmlTemplate["header"].getRealPath() %}
+            {% include htmlTemplate["header"] %}
 
         {% endif %}
 
-        {% include htmlTemplate["body"].getRealPath() %}
+        {% include htmlTemplate["body"] %}
 
         {% if htmlTemplate["footer"] is not null %}
 
-            {% include htmlTemplate["footer"].getRealPath() %}
+            {% include htmlTemplate["footer"] %}
 
         {% endif %}
 

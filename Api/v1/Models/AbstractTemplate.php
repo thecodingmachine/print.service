@@ -3,6 +3,7 @@ namespace Api\v1\Models;
 
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Services\FileService;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class AbstractTemplate
@@ -75,6 +76,11 @@ abstract class AbstractTemplate
         }
     }
 
+    public function __destruct()
+    {
+        $this->fileService->removeFileFromDisk($this->template);
+    }
+
     /**
      * Downloads the template.
      * @throws \Exception
@@ -82,6 +88,8 @@ abstract class AbstractTemplate
     public function download()
     {
         $this->template = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->templateUrl);
+        if ($this->template === null)
+            throw new FileNotFoundException('unable to download remote templates.', 404);
     }
 
     /**
