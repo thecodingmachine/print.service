@@ -191,7 +191,7 @@ class FileService
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath(). "/";
-        $wkhtmltopdfCommand = XVFB_PATH . " " . WKHTMLTOPDF_PATH . " ";
+        $wkhtmltopdfCommand = XVFB_PATH . " -e /dev/stdout " . WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
             $wkhtmltopdfCommand .= "--header-html " . $header->getRealPath() . " --header-spacing 3 ";
@@ -258,7 +258,7 @@ class FileService
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new MergingPdfException();
+            throw new MergingPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);
