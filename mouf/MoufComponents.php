@@ -748,6 +748,70 @@ return new \\Doctrine\\Common\\Annotations\\CachedReader($reader, $container->ge
       'setDefaultRenderer' => 'defaultRenderer',
     ),
   ),
+  'component.bootstrap' => 
+  array (
+    'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
+    'external' => false,
+    'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 
+        array (
+          0 => 'vendor/components/bootstrap/js/bootstrap.js',
+        ),
+        'parametertype' => 'primitive',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'value' => 
+        array (
+        ),
+        'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
+  'component.jquery' => 
+  array (
+    'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
+    'external' => false,
+    'weak' => false,
+    'constructor' => 
+    array (
+      0 => 
+      array (
+        'value' => 
+        array (
+          0 => 'vendor/components/jquery/jquery.js',
+        ),
+        'parametertype' => 'primitive',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'value' => 
+        array (
+        ),
+        'parametertype' => 'object',
+        'type' => 'string',
+        'metadata' => 
+        array (
+        ),
+      ),
+    ),
+  ),
   'customRenderer' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
@@ -853,6 +917,8 @@ return $driver;
       'setWebLibraries' => 
       array (
         0 => 'rootUrlInlineWebLibrary',
+        1 => 'component.jquery',
+        2 => 'component.bootstrap',
       ),
     ),
     'constructor' => 
@@ -1830,6 +1896,20 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getWhoopsMiddleware() {
 	 	return MoufManager::getMoufManager()->get('whoopsMiddleware');
+	 }
+
+	/**
+	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
+	 */
+	 public static function getComponent_jquery() {
+	 	return MoufManager::getMoufManager()->get('component.jquery');
+	 }
+
+	/**
+	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
+	 */
+	 public static function getComponent_bootstrap() {
+	 	return MoufManager::getMoufManager()->get('component.bootstrap');
 	 }
 
 }

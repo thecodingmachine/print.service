@@ -10,4 +10,5 @@ fi
 
 cd /var/www/html;
 npm install;
+chgrp -R www-data *;
 exec /usr/sbin/apachectl -DFOREGROUND;
