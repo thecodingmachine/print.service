@@ -52,13 +52,13 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
   ),
   'APACHE_HOME_DIR' => 
   array (
-    'defaultValue' => '',
+    'defaultValue' => '/home/www-data',
     'type' => 'string',
     'comment' => '',
   ),
   'UNOCONV_PATH' => 
   array (
-    'defaultValue' => '',
+    'defaultValue' => '/usr/local/bin/unoconv',
     'type' => 'string',
     'comment' => '',
   ),
@@ -1717,6 +1717,20 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 }
 
 	/**
+	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
+	 */
+	 public static function getComponent_bootstrap() {
+	 	return MoufManager::getMoufManager()->get('component.bootstrap');
+	 }
+
+	/**
+	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
+	 */
+	 public static function getComponent_jquery() {
+	 	return MoufManager::getMoufManager()->get('component.jquery');
+	 }
+
+	/**
 	 * @return Mouf\Html\Renderer\FileBasedRenderer
 	 */
 	 public static function getCustomRenderer() {
@@ -1896,20 +1910,6 @@ return rtrim(sys_get_temp_dir(), '/\\').'/mouftwigtemplatemain_'.$posixGetuid.st
 	 */
 	 public static function getWhoopsMiddleware() {
 	 	return MoufManager::getMoufManager()->get('whoopsMiddleware');
-	 }
-
-	/**
-	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
-	 */
-	 public static function getComponent_jquery() {
-	 	return MoufManager::getMoufManager()->get('component.jquery');
-	 }
-
-	/**
-	 * @return Mouf\Html\Utils\WebLibraryManager\WebLibrary
-	 */
-	 public static function getComponent_bootstrap() {
-	 	return MoufManager::getMoufManager()->get('component.bootstrap');
 	 }
 
 }
