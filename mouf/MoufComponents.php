@@ -62,6 +62,12 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => '',
   ),
+  'MAX_ATTEMPTS' => 
+  array (
+    'defaultValue' => 10,
+    'type' => 'int',
+    'comment' => 'max consecutive attempts before forwarding exception to client',
+  ),
 ));
 
 $moufManager->setAllVariables(array (
