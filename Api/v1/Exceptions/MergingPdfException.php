@@ -10,11 +10,12 @@ class MergingPdfException extends \Exception
 
     /**
      * MergingPdfException constructor.
+     * @var string $details
      */
-    public function __construct()
+    public function __construct(string $details)
     {
         $this->code = 500;
-        $this->message = "Merging PDF exception: failed to merge PDF files.";
+        $this->message = "Merging PDF exception: failed to merge PDF files. Details: $details";
     }
 
 }

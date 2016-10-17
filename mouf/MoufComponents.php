@@ -32,12 +32,6 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'type' => 'string',
     'comment' => '',
   ),
-  'LIBREOFFICE_PATH' => 
-  array (
-    'defaultValue' => '/usr/local/bin/soffice',
-    'type' => 'string',
-    'comment' => '',
-  ),
   'TEMPORARY_FILES_FOLDER' => 
   array (
     'defaultValue' => 'tmp/',
@@ -55,6 +49,24 @@ $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
     'defaultValue' => '/usr/local/bin/xvfb-run',
     'type' => 'string',
     'comment' => 'path to xvfb-run executable',
+  ),
+  'APACHE_HOME_DIR' => 
+  array (
+    'defaultValue' => '',
+    'type' => 'string',
+    'comment' => '',
+  ),
+  'UNOCONV_PATH' => 
+  array (
+    'defaultValue' => '',
+    'type' => 'string',
+    'comment' => '',
+  ),
+  'MAX_ATTEMPTS' => 
+  array (
+    'defaultValue' => 10,
+    'type' => 'int',
+    'comment' => 'max consecutive attempts before forwarding exception to client',
   ),
 ));
 

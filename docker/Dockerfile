@@ -38,9 +38,9 @@ RUN apt-get update && \
     apt-get install -y pdftk && \
     ln -s /usr/bin/pdftk /usr/local/bin/pdftk
 
-# installs libreoffice
+# installs unoconv
 RUN apt-get update && \
-    apt-get install -y libreoffice && \
-    ln -s /usr/bin/soffice /usr/local/bin/soffice
+    apt-get install -y unoconv && \
+    ln -s /usr/bin/unoconv /usr/local/bin/unoconv
 
 ENTRYPOINT ["/init"]

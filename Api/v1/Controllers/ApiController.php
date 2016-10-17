@@ -39,23 +39,30 @@ class ApiController
      */
     public function generate(ServerRequestInterface $request)
     {
-        try {
-            $accept = $request->getHeaderLine("Accept");
-            $postData = $request->getParsedBody();
-            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
-            $documentsHandler->generate();
-            return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
-        } catch (\Exception $e) {
-            $errorResponse = new JsonResponse([
-                "message" => $e->getMessage(),
-                "stackTrace" => $e->getTraceAsString()
-            ]);
+        $attempts = 0;
+        while (true) {
+            try {
+                $accept = $request->getHeaderLine("Accept");
+                $postData = $request->getParsedBody();
+                $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData);
+                $documentsHandler->generate();
+                return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
+            } catch (\Exception $e) {
+                if ($attempts++ < MAX_ATTEMPTS) {
+                    continue;
+                } else {
+                    $errorResponse = new JsonResponse([
+                        "message" => $e->getMessage(),
+                        "stackTrace" => $e->getTraceAsString()
+                    ]);
 
-            if ($e->getCode() > 100 && $e->getCode() < 599) {
-                return $errorResponse->withStatus($e->getCode());
+                    if ($e->getCode() > 100 && $e->getCode() < 599) {
+                        return $errorResponse->withStatus($e->getCode());
+                    }
+
+                    return $errorResponse;
+                }
             }
-
-            return $errorResponse;
         }
     }
 
@@ -67,23 +74,30 @@ class ApiController
      */
     public function merge(ServerRequestInterface $request)
     {
-        try {
-            $accept = $request->getHeaderLine("Accept");
-            $postData = $request->getParsedBody();
-            $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData, true);
-            $documentsHandler->generate();
-            return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
-        } catch (\Exception $e) {
-            $errorResponse = new JsonResponse([
-                "message" => $e->getMessage(),
-                "stackTrace" => $e->getTraceAsString()
-            ]);
+        $attempts = 0;
+        while (true) {
+            try {
+                $accept = $request->getHeaderLine("Accept");
+                $postData = $request->getParsedBody();
+                $documentsHandler = new DocumentsHandler($this->fileService, $accept, $postData, true);
+                $documentsHandler->generate();
+                return $this->fileService->serveFile($documentsHandler->getFinalDocument(), $documentsHandler->getMediaType());
+            } catch (\Exception $e) {
+                if ($attempts++ < MAX_ATTEMPTS) {
+                    continue;
+                } else {
+                    $errorResponse = new JsonResponse([
+                        "message" => $e->getMessage(),
+                        "stackTrace" => $e->getTraceAsString()
+                    ]);
 
-            if ($e->getCode() > 100 && $e->getCode() < 599) {
-                return $errorResponse->withStatus($e->getCode());
+                    if ($e->getCode() > 100 && $e->getCode() < 599) {
+                        return $errorResponse->withStatus($e->getCode());
+                    }
+
+                    return $errorResponse;
+                }
             }
-
-            return $errorResponse;
         }
     }
 

@@ -191,7 +191,7 @@ class FileService
     public function convertHtmlFileToPdf(\SplFileInfo $body, string $resultFileName, \SplFileInfo $header = null, \SplFileInfo $footer = null): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath(). "/";
-        $wkhtmltopdfCommand = XVFB_PATH . " " . WKHTMLTOPDF_PATH . " ";
+        $wkhtmltopdfCommand = XVFB_PATH . " -e /dev/stdout " . WKHTMLTOPDF_PATH . " ";
 
         if (!empty($header)) {
             $wkhtmltopdfCommand .= "--header-html " . $header->getRealPath() . " --header-spacing 3 ";
@@ -223,13 +223,13 @@ class FileService
     public function convertWordDocumentToPdf(\SplFileInfo $wordDocument, string $resultFileName): \SplFileInfo
     {
         $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
-        $sofficeCommand = LIBREOFFICE_PATH . ' --headless --convert-to pdf ' . $wordDocument->getRealPath() . ' --writer -outdir "' . $folderPath . $resultFileName . '"';
+        $unoconvCommand ="HOME=".APACHE_HOME_DIR. " " . UNOCONV_PATH . ' --format pdf --output "' . $folderPath . $resultFileName . '" "' . $wordDocument->getRealPath() . '"';
 
-        $process = new Process($sofficeCommand);
+        $process = new Process($unoconvCommand);
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new WordDocumentToPdfException();
+            throw new WordDocumentToPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);
@@ -258,7 +258,7 @@ class FileService
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new MergingPdfException();
+            throw new MergingPdfException($process->getErrorOutput());
         }
 
         return new \SplFileInfo($folderPath . $resultFileName);

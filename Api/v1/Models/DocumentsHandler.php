@@ -250,7 +250,17 @@ class DocumentsHandler
             }
         }
 
-        $this->finalDocument = $this->fileService->mergePdfFiles($pdfFilesToMerge, $this->fileService->generateRandomFileName(".pdf"));
+        switch(count($pdfFilesToMerge)) {
+            case 0:
+                // this exception is not supposed to be reachable (means no pdf generated and yet no exception thrown already)
+                throw new MergingPdfException("No file to merge");
+            case 1:
+                $this->finalDocument = $pdfFilesToMerge[0];
+                break;
+            default:
+                $this->finalDocument = $this->fileService->mergePdfFiles($pdfFilesToMerge, $this->fileService->generateRandomFileName(".pdf"));
+                break;
+        }
     }
 
     /**
