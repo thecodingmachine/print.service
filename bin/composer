@@ -2,4 +2,4 @@
 
 docker pull composer/composer:alpine
 docker run --rm -v $1:/app composer/composer:alpine $2
-docker exec -ti printservice_api chown -R www-data:www-data vendor
+docker exec -ti printservice_api chown -R www-data:www-data vendor > /dev/null 2>&1
