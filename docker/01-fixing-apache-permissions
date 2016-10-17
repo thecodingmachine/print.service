@@ -1,7 +1,5 @@
 /var/www/html/mouf true www-data 0644 0775
 /var/www/html/Api true www-data 0644 0775
 /var/www/html/tmp true www-data 0644 0775
-/var/www/html/node_modules true www-data 0644 0775
 /var/www/html/.htaccess true www-data 0644 0775
 /var/www/html/config.php true www-data 0644 0775
-/var/www/html/package.json true www-data 0644 0775
