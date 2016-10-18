@@ -4,9 +4,9 @@ version: '2'
 services:
   php-apache:
     build: ./docker
-    container_name: printservice_api
+    container_name: preprod_rintservice_api
     ports:
-      - 80:80
+      - 8082:80
     volumes:
       # main volume
       - .:/var/www/html:rw
