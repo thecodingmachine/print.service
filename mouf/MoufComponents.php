@@ -1010,7 +1010,8 @@ return $driver;
         'value' => 'return [
     "users" => [
         "print-service" => password_hash("apideo", PASSWORD_DEFAULT)
-    ]
+    ],
+    "secure" => false
 ];',
         'parametertype' => 'primitive',
         'type' => 'php',
@@ -1494,7 +1495,8 @@ return $driver;
 						return [
     "users" => [
         "print-service" => password_hash("apideo", PASSWORD_DEFAULT)
-    ]
+    ],
+    "secure" => false
 ];
 					},
 				],
