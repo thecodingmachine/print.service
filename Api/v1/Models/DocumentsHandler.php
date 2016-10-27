@@ -100,7 +100,7 @@ class DocumentsHandler
         }
 
         $templatesData = $documentData["templates"];
-        $data = isset($documentData["data"]) && !empty($documentData["data"]) ? $documentData["data"] : null;
+        $data = isset($documentData["data"]) && !empty($documentData["data"]) ? $documentData["data"] : [];
 
         $document = new Document($this->fileService, $data);
 
