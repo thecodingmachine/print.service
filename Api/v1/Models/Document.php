@@ -51,9 +51,9 @@ class Document
     /**
      * Document constructor.
      * @param FileService $fileService
-     * @param array|null $data
+     * @param array $data
      */
-    public function __construct(FileService $fileService, array $data = null)
+    public function __construct(FileService $fileService, array $data = [])
     {
         $this->fileService = $fileService;
         $this->templates = [];
