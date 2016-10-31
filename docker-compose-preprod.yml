@@ -1,5 +1,5 @@
 # docker-compose-preprod.yml: for preprod environment only!
-version: '3'
+version: '2'
 
 services:
   php-apache:
