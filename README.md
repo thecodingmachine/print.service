@@ -10,28 +10,28 @@ Install Docker (**>= 1.10**) for MacOSX / Linux following the official instructi
 
 Install docker-compose (**>= 1.8.0**) for MacOSX / Linux following the official instructions: <https://docs.docker.com/compose/install/>
 
-Move to the root directory of the project. You'll have to launch the following commands:
+Move to the root directory of the project. You'll have to launch the following commands (replace ```env``` by one of: ```dev```, ```preprod```, ```prod```):
 
 ## Install php packages using:
 
 ```
-./bin/composer $(pwd) install
+./bin/composer env $(pwd) install
 ```
 
 ## Build the docker container:
 
 ```
-./bin/build $(pwd)
+./bin/build env
 ```
 
 ## Start the docker container:
 
 ```
-./bin/up $(pwd)
+./bin/up env
 ```
 
 ## Last but not least
- 
+
 Install Mouf framework: <http://localhost/vendor/mouf/mouf>
 
 # Candies
@@ -45,7 +45,7 @@ Install Mouf framework: <http://localhost/vendor/mouf/mouf>
 ## Stop the container:
 
 ```
-./bin/stop
+./bin/stop env
 ```
 
 # API
@@ -58,13 +58,13 @@ Your request must have the following headers:
 
 If you want a HTML output:
 
-**Accept:** text/html 
+**Accept:** text/html
 
 A Word document output:
 
-**Accept:** application/vnd.openxmlformats-officedocument.wordprocessingml.document 
+**Accept:** application/vnd.openxmlformats-officedocument.wordprocessingml.document
 
-A PDF document output: 
+A PDF document output:
 
 **Accept:** application/pdf
 
@@ -312,15 +312,15 @@ Allows to generate many documents and merge them into one final document.
 ### Defining user(s) for HTTP basic authentication
 
 Go to <http://localhost/vendor/mouf/mouf/ajaxinstance/?name=httpBasicAuthenticationMiddleware> and update the options parameter.
-    
+
 # FAQ / Known issues
-    
+
 ## The docker container is not running
-    
+
 You might have to stop your local apache.
-    
+
 ## I've some permissions issues in Mouf
-    
+
 You might have to stop the container (`./bin/stop`) and start it again (`/bin/up $(pwd)`).
 
 ## I can't generate a Word document with many Word templates
