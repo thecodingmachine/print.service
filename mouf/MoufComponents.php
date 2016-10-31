@@ -8,61 +8,61 @@ MoufManager::initMoufManager();
 $moufManager = MoufManager::getMoufManager();
 
 $moufManager->getConfigManager()->setConstantsDefinitionArray(array (
-  'DEBUG' =>
+  'DEBUG' => 
   array (
     'defaultValue' => true,
     'type' => 'bool',
     'comment' => 'Set to true to enable debug/development mode.',
   ),
-  'SECRET' =>
+  'SECRET' => 
   array (
     'defaultValue' => 'Eol5obswtmhf0e2L05S7',
     'type' => 'string',
     'comment' => 'A random string. It should be different for any application deployed.',
   ),
-  'PDFTK_PATH' =>
+  'PDFTK_PATH' => 
   array (
     'defaultValue' => '/usr/local/bin/pdftk',
     'type' => 'string',
     'comment' => '',
   ),
-  'WKHTMLTOPDF_PATH' =>
+  'WKHTMLTOPDF_PATH' => 
   array (
     'defaultValue' => '/usr/local/bin/wkhtmltopdf',
     'type' => 'string',
     'comment' => '',
   ),
-  'TEMPORARY_FILES_FOLDER' =>
+  'TEMPORARY_FILES_FOLDER' => 
   array (
     'defaultValue' => 'tmp/',
     'type' => 'string',
     'comment' => '',
   ),
-  'NODE_PATH' =>
+  'NODE_PATH' => 
   array (
     'defaultValue' => '/usr/local/bin/node',
     'type' => 'string',
     'comment' => '',
   ),
-  'XVFB_PATH' =>
+  'XVFB_PATH' => 
   array (
     'defaultValue' => '/usr/local/bin/xvfb-run',
     'type' => 'string',
     'comment' => 'path to xvfb-run executable',
   ),
-  'APACHE_HOME_DIR' =>
+  'APACHE_HOME_DIR' => 
   array (
     'defaultValue' => '/home/www-data',
     'type' => 'string',
     'comment' => '',
   ),
-  'UNOCONV_PATH' =>
+  'UNOCONV_PATH' => 
   array (
     'defaultValue' => '/usr/local/bin/unoconv',
     'type' => 'string',
     'comment' => '',
   ),
-  'MAX_ATTEMPTS' =>
+  'MAX_ATTEMPTS' => 
   array (
     'defaultValue' => 10,
     'type' => 'int',
@@ -76,338 +76,338 @@ $moufManager->setAllVariables(array (
 ));
 
 $moufManager->addComponentInstances(array (
-  'ApiController_v1' =>
+  'ApiController_v1' => 
   array (
     'class' => 'Api\\v1\\Controllers\\ApiController',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'fileService_v1',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController' =>
+  'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'bootstrapTemplate',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'block.content',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'DEBUG',
         'parametertype' => 'primitive',
         'type' => 'config',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Routers\\ExceptionRouter' =>
+  'Mouf\\Mvc\\Splash\\Routers\\ExceptionRouter' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\ExceptionRouter',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'psr.errorLogLogger',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Routers\\NotFoundRouter' =>
+  'Mouf\\Mvc\\Splash\\Routers\\NotFoundRouter' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\NotFoundRouter',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'psr.errorLogLogger',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Routers\\PhpVarsCheckRouter' =>
+  'Mouf\\Mvc\\Splash\\Routers\\PhpVarsCheckRouter' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\PhpVarsCheckRouter',
     'external' => false,
     'weak' => false,
   ),
-  'Mouf\\Mvc\\Splash\\Routers\\SplashDefaultRouter' =>
+  'Mouf\\Mvc\\Splash\\Routers\\SplashDefaultRouter' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\SplashDefaultRouter',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container;',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
-        'value' =>
+        'value' => 
         array (
           0 => 'Mouf\\Mvc\\Splash\\Services\\MoufExplorerUrlProvider',
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Services\\ParameterFetcherRegistry',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 'splashCachePool',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      4 =>
+      4 => 
       array (
         'value' => 'psr.errorLogLogger',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      5 =>
+      5 => 
       array (
         'value' => 'strict',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      6 =>
+      6 => 
       array (
         'value' => 'DEBUG',
         'parametertype' => 'primitive',
         'type' => 'config',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      7 =>
+      7 => 
       array (
         'value' => 'return ROOT_URL;',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
-    'setterBinds' =>
+    'setterBinds' => 
     array (
       'setHttp400Handler' => 'Mouf\\Mvc\\Splash\\Controllers\\HttpErrorsController',
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Services\\ControllerAnalyzer' =>
+  'Mouf\\Mvc\\Splash\\Services\\ControllerAnalyzer' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\ControllerAnalyzer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container;',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Services\\ParameterFetcherRegistry',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'annotationReader',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Services\\ControllerRegistry' =>
+  'Mouf\\Mvc\\Splash\\Services\\ControllerRegistry' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\ControllerRegistry',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Services\\ControllerAnalyzer',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
-        'value' =>
+        'value' => 
         array (
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Services\\MoufControllerExplorer',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Services\\MoufControllerExplorer' =>
+  'Mouf\\Mvc\\Splash\\Services\\MoufControllerExplorer' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\MoufControllerExplorer',
     'external' => false,
     'weak' => false,
   ),
-  'Mouf\\Mvc\\Splash\\Services\\MoufExplorerUrlProvider' =>
+  'Mouf\\Mvc\\Splash\\Services\\MoufExplorerUrlProvider' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\MoufExplorerUrlProvider',
     'external' => false,
     'weak' => false,
   ),
-  'Mouf\\Mvc\\Splash\\Services\\ParameterFetcherRegistry' =>
+  'Mouf\\Mvc\\Splash\\Services\\ParameterFetcherRegistry' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\ParameterFetcherRegistry',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
-        'value' =>
+        'value' => 
         array (
           0 => 'Mouf\\Mvc\\Splash\\Services\\SplashRequestFetcher',
           1 => 'Mouf\\Mvc\\Splash\\Services\\SplashRequestParameterFetcher',
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'Mouf\\Mvc\\Splash\\Services\\SplashRequestFetcher' =>
+  'Mouf\\Mvc\\Splash\\Services\\SplashRequestFetcher' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\SplashRequestFetcher',
     'external' => false,
     'weak' => false,
   ),
-  'Mouf\\Mvc\\Splash\\Services\\SplashRequestParameterFetcher' =>
+  'Mouf\\Mvc\\Splash\\Services\\SplashRequestParameterFetcher' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Services\\SplashRequestParameterFetcher',
     'external' => false,
     'weak' => false,
   ),
-  'Mouf\\Mvc\\Splash\\SplashMiddleware' =>
+  'Mouf\\Mvc\\Splash\\SplashMiddleware' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\SplashMiddleware',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
-        'value' =>
+        'value' => 
         array (
           0 => '__anonymous__2e32_306812_1474630791154',
           1 => '__anonymous__2e32_766222_1473858447177',
@@ -419,202 +419,202 @@ $moufManager->addComponentInstances(array (
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1078724055' =>
+  '__anonymous__2e32_1078724055' => 
   array (
     'class' => 'Mouf\\Utils\\Value\\Variable',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'DEBUG',
         'parametertype' => 'primitive',
         'type' => 'config',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1083046185' =>
+  '__anonymous__2e32_1083046185' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Routers\\NotFoundRouter',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1122304490' =>
+  '__anonymous__2e32_1122304490' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\ErrorRouter',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Routers\\ExceptionRouter',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1168295569' =>
+  '__anonymous__2e32_1168295569' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Routers\\SplashDefaultRouter',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1193726777' =>
+  '__anonymous__2e32_1193726777' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'Mouf\\Mvc\\Splash\\Routers\\PhpVarsCheckRouter',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_16918206' =>
+  '__anonymous__2e32_16918206' => 
   array (
     'class' => 'Mouf\\Utils\\Common\\Condition\\ToCondition',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => '__anonymous__2e32_1078724055',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_1984332620' =>
+  '__anonymous__2e32_1984332620' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\ErrorRouter',
     'external' => false,
     'anonymous' => true,
     'weak' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container->get(\'whoopsMiddleware\');',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => NULL,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => '__anonymous__2e32_16918206',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_306812_1474630791154' =>
+  '__anonymous__2e32_306812_1474630791154' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
     'external' => false,
     'weak' => true,
     'anonymous' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container->get(\'httpBasicAuthenticationMiddleware\');',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  '__anonymous__2e32_766222_1473858447177' =>
+  '__anonymous__2e32_766222_1473858447177' => 
   array (
     'class' => 'Mouf\\Mvc\\Splash\\Routers\\Router',
     'external' => false,
     'weak' => true,
     'anonymous' => true,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container->get(\'payloadMiddleware\');',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'annotationReader' =>
+  'annotationReader' => 
   array (
     'weak' => false,
     'comment' => '',
@@ -628,116 +628,116 @@ $loader = require ROOT_PATH . \'vendor/autoload.php\';
 $reader = new \\Doctrine\\Common\\Annotations\\AnnotationReader();
 return new \\Doctrine\\Common\\Annotations\\CachedReader($reader, $container->get("defaultDoctrineCache"));',
   ),
-  'apcCacheService' =>
+  'apcCacheService' => 
   array (
     'class' => 'Mouf\\Utils\\Cache\\ApcCache',
     'external' => false,
     'weak' => false,
-    'fieldProperties' =>
+    'fieldProperties' => 
     array (
-      'defaultTimeToLive' =>
+      'defaultTimeToLive' => 
       array (
         'value' => 3600,
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      'prefix' =>
+      'prefix' => 
       array (
         'value' => 'SECRET',
         'type' => 'config',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
-    'fieldBinds' =>
+    'fieldBinds' => 
     array (
       'fallback' => 'fileCacheService',
     ),
   ),
-  'block.content' =>
+  'block.content' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlBlock',
     'external' => false,
     'weak' => false,
   ),
-  'block.footer' =>
+  'block.footer' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlBlock',
     'external' => false,
     'weak' => false,
   ),
-  'block.header' =>
+  'block.header' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlBlock',
     'external' => false,
     'weak' => false,
   ),
-  'block.left' =>
+  'block.left' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlBlock',
     'external' => false,
     'weak' => false,
   ),
-  'block.right' =>
+  'block.right' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlBlock',
     'external' => false,
     'weak' => false,
   ),
-  'bootstrapRenderer' =>
+  'bootstrapRenderer' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'vendor/mouf/html.template.bootstrap/src/templates',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'template',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 0,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'bootstrapTemplate' =>
+  'bootstrapTemplate' => 
   array (
     'class' => 'Mouf\\Html\\Template\\BootstrapTemplate',
     'external' => false,
     'weak' => false,
-    'setterBinds' =>
+    'setterBinds' => 
     array (
       'setContent' => 'block.content',
       'setLeft' => 'block.left',
@@ -748,125 +748,125 @@ return new \\Doctrine\\Common\\Annotations\\CachedReader($reader, $container->ge
       'setDefaultRenderer' => 'defaultRenderer',
     ),
   ),
-  'component.bootstrap' =>
+  'component.bootstrap' => 
   array (
     'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
-        'value' =>
+        'value' => 
         array (
           0 => 'vendor/components/bootstrap/js/bootstrap.js',
         ),
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
-        'value' =>
+        'value' => 
         array (
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'component.jquery' =>
+  'component.jquery' => 
   array (
     'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibrary',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
-        'value' =>
+        'value' => 
         array (
           0 => 'vendor/components/jquery/jquery.js',
         ),
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
-        'value' =>
+        'value' => 
         array (
         ),
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'customRenderer' =>
+  'customRenderer' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'src/templates',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'custom',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 0,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      4 =>
+      4 => 
       array (
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'defaultDoctrineCache' =>
+  'defaultDoctrineCache' => 
   array (
     'weak' => false,
     'comment' => '',
@@ -889,123 +889,123 @@ $driver->setNamespace(SECRET);
 return $driver;
 ',
   ),
-  'defaultRenderer' =>
+  'defaultRenderer' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\AutoChainRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'defaultWebLibraryManager' =>
+  'defaultWebLibraryManager' => 
   array (
     'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\WebLibraryManager',
     'external' => false,
     'weak' => false,
-    'setterBinds' =>
+    'setterBinds' => 
     array (
-      'setWebLibraries' =>
+      'setWebLibraries' => 
       array (
         0 => 'rootUrlInlineWebLibrary',
         1 => 'component.jquery',
         2 => 'component.bootstrap',
       ),
     ),
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'defaultRenderer',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'doctrineMoufCache' =>
+  'doctrineMoufCache' => 
   array (
     'class' => 'Mouf\\Utils\\Common\\Doctrine\\Cache\\DoctrineCacheAdapter',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'defaultDoctrineCache',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'fileCacheService' =>
+  'fileCacheService' => 
   array (
     'class' => 'Mouf\\Utils\\Cache\\FileCache',
     'external' => false,
     'weak' => false,
-    'fieldProperties' =>
+    'fieldProperties' => 
     array (
-      'defaultTimeToLive' =>
+      'defaultTimeToLive' => 
       array (
         'value' => 3600,
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      'prefix' =>
+      'prefix' => 
       array (
         'value' => 'SECRET',
         'type' => 'config',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'fileService_v1' =>
+  'fileService_v1' => 
   array (
     'class' => 'Api\\v1\\Services\\FileService',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'httpBasicAuthenticationMiddleware' =>
+  'httpBasicAuthenticationMiddleware' => 
   array (
     'class' => 'Slim\\Middleware\\HttpBasicAuthentication',
     'external' => false,
     'weak' => false,
-    'setterProperties' =>
+    'setterProperties' => 
     array (
     ),
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return [
     "users" => [
@@ -1015,278 +1015,278 @@ return $driver;
 ];',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'messageWidget' =>
+  'messageWidget' => 
   array (
     'class' => 'Mouf\\Html\\Widgets\\MessageService\\Widget\\MessageWidget',
     'external' => false,
     'weak' => false,
-    'fieldBinds' =>
+    'fieldBinds' => 
     array (
       'messageProvider' => 'userMessageService',
     ),
   ),
-  'moufTwigExtension' =>
+  'moufTwigExtension' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\Twig\\MoufTwigExtension',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return $container;',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'packageRenderer_mouf/html.utils.weblibrarymanager' =>
+  'packageRenderer_mouf/html.utils.weblibrarymanager' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'vendor/mouf/html.utils.weblibrarymanager/src/templates',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'package',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 0,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      4 =>
+      4 => 
       array (
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'packageRenderer_mouf/html.widgets.menu' =>
+  'packageRenderer_mouf/html.widgets.menu' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'vendor/mouf/html.widgets.menu/src/templates',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'package',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 0,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      4 =>
+      4 => 
       array (
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'packageRenderer_mouf/html.widgets.messageservice' =>
+  'packageRenderer_mouf/html.widgets.messageservice' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\FileBasedRenderer',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'vendor/mouf/html.widgets.messageservice/src/templates',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'rendererCacheService',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      2 =>
+      2 => 
       array (
         'value' => 'package',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      3 =>
+      3 => 
       array (
         'value' => 0,
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      4 =>
+      4 => 
       array (
         'value' => 'twigEnvironment',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'payloadMiddleware' =>
+  'payloadMiddleware' => 
   array (
     'class' => 'Psr7Middlewares\\Middleware\\Payload',
     'external' => false,
     'weak' => false,
   ),
-  'psr.errorLogLogger' =>
+  'psr.errorLogLogger' => 
   array (
     'class' => 'Mouf\\Utils\\Log\\Psr\\ErrorLogLogger',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'warning',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'rendererCacheService' =>
+  'rendererCacheService' => 
   array (
     'class' => 'Mouf\\Utils\\Cache\\InMemoryCache',
     'external' => false,
     'weak' => false,
-    'fieldBinds' =>
+    'fieldBinds' => 
     array (
       'chainWith' => 'apcCacheService',
     ),
   ),
-  'rootUrlInlineWebLibrary' =>
+  'rootUrlInlineWebLibrary' => 
   array (
     'class' => 'Mouf\\Html\\Utils\\WebLibraryManager\\InlineWebLibrary',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'rootUrlJsFile',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'rootUrlJsFile' =>
+  'rootUrlJsFile' => 
   array (
     'class' => 'Mouf\\Html\\HtmlElement\\HtmlFromFile',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'vendor/mouf/html.utils.weblibrarymanager/javascript/rootUrl.php',
         'parametertype' => 'primitive',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'sessionManager' =>
+  'sessionManager' => 
   array (
     'class' => 'Mouf\\Utils\\Session\\SessionManager\\DefaultSessionManager',
     'external' => false,
   ),
-  'splashCachePool' =>
+  'splashCachePool' => 
   array (
     'weak' => false,
     'comment' => '',
@@ -1310,14 +1310,14 @@ $compositeDriver = new Stash\\Driver\\Composite([\'drivers\'=>$drivers]);
 
 return new Stash\\Pool($compositeDriver);',
   ),
-  'twigCacheFileSystem' =>
+  'twigCacheFileSystem' => 
   array (
     'class' => 'Twig_Cache_Filesystem',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => '// If we are running on a Unix environment, let\'s prepend the cache with the user id of the PHP process.
 // This way, we can avoid rights conflicts.
@@ -1329,47 +1329,47 @@ if (function_exists(\'posix_geteuid\')) {
 return rtrim(sys_get_temp_dir(), \'/\\\\\').\'/mouftwigtemplatemain_\'.$posixGetuid.str_replace(":", "", ROOT_PATH);',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'twigDebugExtension' =>
+  'twigDebugExtension' => 
   array (
     'class' => 'Twig_Extension_Debug',
     'external' => false,
     'weak' => false,
   ),
-  'twigEnvironment' =>
+  'twigEnvironment' => 
   array (
     'class' => 'Mouf\\Html\\Renderer\\Twig\\MoufTwigEnvironment',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'twigLoaderFileSystem',
         'parametertype' => 'object',
         'type' => 'string',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
-      1 =>
+      1 => 
       array (
         'value' => 'return array(\'debug\' => DEBUG, \'auto_reload\' => true);',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
-    'setterBinds' =>
+    'setterBinds' => 
     array (
-      'setExtensions' =>
+      'setExtensions' => 
       array (
         0 => 'moufTwigExtension',
         1 => 'twigDebugExtension',
@@ -1377,35 +1377,35 @@ return rtrim(sys_get_temp_dir(), \'/\\\\\').\'/mouftwigtemplatemain_\'.$posixGet
       'setCache' => 'twigCacheFileSystem',
     ),
   ),
-  'twigLoaderFileSystem' =>
+  'twigLoaderFileSystem' => 
   array (
     'class' => 'Twig_Loader_Filesystem',
     'external' => false,
     'weak' => false,
-    'constructor' =>
+    'constructor' => 
     array (
-      0 =>
+      0 => 
       array (
         'value' => 'return ROOT_PATH;',
         'parametertype' => 'primitive',
         'type' => 'php',
-        'metadata' =>
+        'metadata' => 
         array (
         ),
       ),
     ),
   ),
-  'userMessageService' =>
+  'userMessageService' => 
   array (
     'class' => 'Mouf\\Html\\Widgets\\MessageService\\Service\\SessionMessageService',
     'external' => false,
     'weak' => false,
-    'fieldBinds' =>
+    'fieldBinds' => 
     array (
       'sessionManager' => 'sessionManager',
     ),
   ),
-  'whoopsMiddleware' =>
+  'whoopsMiddleware' => 
   array (
     'class' => 'Franzl\\Middleware\\Whoops\\ErrorMiddleware',
     'external' => false,
