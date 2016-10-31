@@ -15,7 +15,7 @@ Move to the root directory of the project. You'll have to launch the following c
 ## Install php packages using:
 
 ```
-./bin/composer env $(pwd) install
+./bin/composer env install
 ```
 
 ## Build the docker container:
