@@ -1,5 +1,5 @@
 # docker-compose-prod.yml: for prod environment only!
-version: '2'
+version: '3'
 
 services:
   php-apache:

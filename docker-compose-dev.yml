@@ -1,5 +1,5 @@
 # docker-compose-dev.yml: for dev environment only!
-version: '2'
+version: '3'
 
 services:
   php-apache:
