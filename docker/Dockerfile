@@ -43,4 +43,10 @@ RUN apt-get update && \
     apt-get install -y unoconv && \
     ln -s /usr/bin/unoconv /usr/local/bin/unoconv
 
+# mscore fonts
+RUN echo "deb http://httpredir.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get update && \
+    apt-get install -y ttf-mscorefonts-installer
+
 ENTRYPOINT ["/init"]
