@@ -1,12 +1,12 @@
-# docker-compose-dev.yml: for dev environment only!
+# docker-compose-prod.yml: for prod environment only!
 version: '2'
 
 services:
   php-apache:
     build: ./docker
-    container_name: printservice_api
+    container_name: printservice_api_prod
     ports:
-      - 80:80
+      - 8081:80
     volumes:
       # main volume
       - .:/var/www/html:rw

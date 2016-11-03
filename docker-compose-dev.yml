@@ -1,0 +1,20 @@
+# docker-compose-dev.yml: for dev environment only!
+version: '2'
+
+services:
+  php-apache:
+    build: ./docker
+    container_name: printservice_api_dev
+    ports:
+      - 80:80
+    volumes:
+      # main volume
+      - .:/var/www/html:rw
+      # others
+      - ./docker/ext-apcu.ini:/usr/local/etc/php/conf.d/ext-acpu.ini:ro
+      - ./docker/ext-xdebug.ini:/usr/local/etc/php/conf.d/ext-xdebug.ini:ro
+      - ./docker/run:/etc/services.d/apache/run:rw
+      # ignored folders
+      - /var/www/html/bin
+      - /var/www/html/docker
+    restart: unless-stopped
