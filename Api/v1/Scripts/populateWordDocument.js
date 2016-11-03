@@ -1,3 +1,10 @@
+// initialize Angular parser
+var expressions= require('angular-expressions')
+var angularParser= function(tag){
+    expr=expressions.compile(tag);
+    return {get:expr};
+}
+
 // loads libraries
 var DocxTemplater = require('docxtemplater'),
     ImageModule = require('docxtemplater-image-module'),
@@ -75,6 +82,7 @@ fs.readFile(templateRealPath, function(err, data) {
     document.attachModule(new ImageModule(imageOptions));
     document.attachModule(new LinkModule());
     document.attachModule(new ChartModule());
+    document.setOptions({parser:angularParser});
     document.load(data);
     document.setData(jsonData);
     document.render();
