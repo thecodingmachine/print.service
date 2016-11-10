@@ -1,3 +1,9 @@
 #!/bin/bash
 
-docker-compose -f $1/docker-compose.yml up
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT=${DIR}/..
+
+if [ "$1" == "dev" ] || [ "$1" == "preprod" ] || [ "$1" == "prod" ]
+then
+    docker-compose -f ${ROOT}/docker-compose-$1.yml up
+fi

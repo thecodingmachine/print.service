@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT=${DIR}/..
+
 docker pull composer/composer:alpine
-docker run --rm -v $1:/app composer/composer:alpine $2
-docker exec -ti printservice_api chown -R www-data:www-data vendor > /dev/null 2>&1
+docker run --rm -v $ROOT:/app composer/composer:alpine $2
+docker exec -ti printservice_api_$1 chown -R www-data:www-data vendor > /dev/null 2>&1
