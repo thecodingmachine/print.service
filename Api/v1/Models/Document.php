@@ -5,6 +5,7 @@ use Api\v1\Exceptions\BadRequestException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Api\v1\Exceptions\ExcelDocumentToPdfException;
 use Api\v1\Services\FileService;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -42,7 +43,10 @@ class Document
      * @var array
      */
     private $formattedDataForWordDocument;
-
+    /**
+     * @var array
+     */
+    private $formattedDataForExcelDocument;
     /**
      * @var array<\SplFileInfo>
      */
@@ -60,6 +64,7 @@ class Document
         $this->data = $data;
         $this->formattedDataForHtml = [];
         $this->formattedDataForWordDocument = [];
+        $this->formattedDataForExcelDocument = [];
         $this->images = [];
     }
 
@@ -80,6 +85,8 @@ class Document
             $this->formattedDataForHtml = $this->formatDataForHtml($this->data);
         } else if ($template->getContentType() == AbstractTemplate::WORD_CONTENT_TYPE && empty($this->formattedDataForWordDocument)) {
             $this->formattedDataForWordDocument = $this->formatDataForWordDocument($this->data);
+        } else if ($template->getContentType() == AbstractTemplate::EXCEL_CONTENT_TYPE && empty($this->formattedDataForExcelDocument)) {
+            $this->formattedDataForExcelDocument = $this->formatDataForExcelDocument($this->data);
         }
     }
 
@@ -188,6 +195,51 @@ class Document
     }
 
     /**
+     * Parses the data looking for images to download and format the data for populating Excel templates.
+     * @param array
+     * @return array
+     * @throws BadRequestException
+     * @throws \Exception
+     */
+    private function formatDataForExcelDocument(array $data): array
+    {
+        $formattedData = [];
+        foreach ($data as $key => $currentData) {
+            if (!is_array($currentData)) {
+                $formattedData[$key] = $currentData;
+                continue;
+            }
+            if (isset($currentData["type"])) {
+                if (empty($currentData["type"])) {
+                    throw new BadRequestException();
+                }
+                switch ($currentData["type"]) {
+                    case Document::LINK_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+                        if (isset($currentData["text"]) && empty($currentData["text"])) {
+                            throw new BadRequestException();
+                        }
+                        $formattedData[$key] = isset($currentData["text"]) ? [ "text" => $currentData["text"], "url" => $currentData["url"] ] : $currentData["url"];
+                        break;
+                    case Document::IMAGE_DATA_TYPE:
+                        if (!isset($currentData["url"]) || empty($currentData["url"])) {
+                            throw new BadRequestException();
+                        }
+                        $file = $this->downloadImage($currentData["url"]);
+                        $formattedData[$key] = $file->getRealPath();
+                        break;
+                    default:
+                        throw new BadRequestException();
+                }
+                continue;
+            }
+            $formattedData[$key] = $this->formatDataForWordDocument($currentData);
+        }
+        return $formattedData;
+    }
+    /**
      * Downloads an image and adds it to the array of images.
      * @param string $url
      * @return \SplFileInfo
@@ -234,6 +286,9 @@ class Document
                 case AbstractTemplate::WORD_CONTENT_TYPE:
                     /** @var WordTemplate $currentTemplate */
                     $currentTemplate->populate($this->formattedDataForWordDocument);
+                case AbstractTemplate::EXCEL_CONTENT_TYPE:
+                    /** @var ExcelTemplate $currentTemplate */
+                    $currentTemplate->populate($this->formattedDataForExcelDocument);
             }
         }
     }

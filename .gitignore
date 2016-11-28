@@ -7,6 +7,4 @@ npm-debug.log
 tmp/*
 !tmp/.empty
 config.php
-print-service.sublime-project
-
-print-service.sublime-workspace
+print-service.sublime-*
