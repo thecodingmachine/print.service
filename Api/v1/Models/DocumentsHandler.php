@@ -7,6 +7,7 @@ use Api\v1\Exceptions\MediaTypeException;
 use Api\v1\Exceptions\MergingHtmlException;
 use Api\v1\Exceptions\MergingPdfException;
 use Api\v1\Exceptions\MergingWordDocumentException;
+use Api\v1\Exceptions\MergingExcelDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Services\FileService;
 
@@ -61,7 +62,7 @@ class DocumentsHandler
         $this->fileService = $fileService;
         $this->mediaType = $mediaType;
         $this->documents = [];
-        
+
         // case: merge many documents
         if ($isMerge) {
 
@@ -69,7 +70,7 @@ class DocumentsHandler
             foreach ($postData as $currentDocumentData) {
                 $this->documents[] = $this->parseSingleDocumentData($currentDocumentData);
             }
-            
+
         } else {
             // case: generate single document
             $this->documents[] = $this->parseSingleDocumentData($postData);
@@ -125,10 +126,16 @@ class DocumentsHandler
                     $document->addTemplate(new HtmlTemplate($this->fileService, $order, $templateUrl, $headerTemplateUrl, $footerTemplateUrl));
                     break;
                 case AbstractTemplate::WORD_CONTENT_TYPE:
-                    if ($this->mediaType == AbstractTemplate::HTML_CONTENT_TYPE) {
+                    if ($this->mediaType != AbstractTemplate::PDF_CONTENT_TYPE && $this->mediaType != AbstractTemplate::WORD_CONTENT_TYPE) {
                         throw new MediaTypeException();
                     }
                     $document->addTemplate(new WordTemplate($this->fileService, $order, $templateUrl));
+                    break;
+                case AbstractTemplate::EXCEL_CONTENT_TYPE:
+                    if ($this->mediaType != AbstractTemplate::PDF_CONTENT_TYPE && $this->mediaType != AbstractTemplate::EXCEL_CONTENT_TYPE) {
+                        throw new MediaTypeException();
+                    }
+                    $document->addTemplate(new ExcelTemplate($this->fileService, $order, $templateUrl));
                     break;
                 case AbstractTemplate::PDF_CONTENT_TYPE:
                     if ($this->mediaType != $contentType) {
@@ -168,6 +175,9 @@ class DocumentsHandler
                 break;
             case AbstractTemplate::WORD_CONTENT_TYPE:
                 $this->mergeAsWordDocument();
+                break;
+            case AbstractTemplate::EXCEL_CONTENT_TYPE:
+                $this->mergeAsExcelDocument();
                 break;
             case AbstractTemplate::PDF_CONTENT_TYPE:
                 $this->mergeAsPdf();
@@ -224,6 +234,24 @@ class DocumentsHandler
         }
 
         $this->finalDocument = $this->fileService->mergeWordDocuments($wordDocumentsToMerge, $this->fileService->generateRandomFileName(".docx"));
+    }
+
+    /**
+     * Merges Excel document files.
+     * @throws MergingExcelDocumentException
+     */
+    private function mergeAsExcelDocument()
+    {
+        $excelDocumentsToMerge = [];
+        /** @var Document $currentDocument */
+        foreach ($this->documents as $currentDocument) {
+            $currentTemplates = $currentDocument->getTemplates();
+            /** @var ExcelTemplate $currentTemplate */
+            foreach ($currentTemplates as $currentTemplate) {
+                $excelDocumentsToMerge[] = $currentTemplate->getPopulatedTemplate();
+            }
+        }
+        $this->finalDocument = $this->fileService->mergeExcelDocuments($excelDocumentsToMerge, $this->fileService->generateRandomFileName(".xlsx"));
     }
 
     /**

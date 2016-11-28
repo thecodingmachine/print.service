@@ -5,6 +5,7 @@ use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Api\v1\Exceptions\ExcelDocumentToPdfException;
 use Api\v1\Services\FileService;
 
 /**
@@ -47,6 +48,9 @@ abstract class AbstractTemplateToPopulate extends AbstractTemplate
                 break;
             case AbstractTemplate::WORD_CONTENT_TYPE:
                 $this->populatedTemplateFileExtension = ".docx";
+                break;
+            case AbstractTemplate::EXCEL_CONTENT_TYPE:
+                $this->populatedTemplateFileExtension = ".xlsx";
                 break;
             default:
                 throw new ContentTypeException($contentType);

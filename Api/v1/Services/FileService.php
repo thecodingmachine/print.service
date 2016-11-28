@@ -5,8 +5,10 @@ use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\MergingHtmlException;
 use Api\v1\Exceptions\MergingPdfException;
 use Api\v1\Exceptions\MergingWordDocumentException;
+use Api\v1\Exceptions\MergingExcelDocumentException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
+use Api\v1\Exceptions\ExcelDocumentToPdfException;
 use Doctrine\Common\Cache\FilesystemCache;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -180,6 +182,33 @@ class FileService
     }
 
     /**
+     * Populates a Excel document.
+     * @param \SplFileInfo $file
+     * @param array $data
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws UnprocessableEntityException
+     */
+    public function populateExcelDocument(\SplFileInfo $file, array $data, string $resultFileName): \SplFileInfo
+    {
+        $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
+        $scriptFile = new \SplFileInfo(ROOT_PATH . "Api/v1/Scripts/populateExcelDocument.js");
+        $nodeCommand = NODE_PATH . " " . $scriptFile->getRealPath() . " " . $file->getRealPath() . " " . escapeshellarg(json_encode($data)) . " " . $folderPath . $resultFileName;
+        $process = new Process($nodeCommand);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new UnprocessableEntityException($process->getErrorOutput());
+        }
+        $unoconvCommand ="HOME=".APACHE_HOME_DIR. " " . UNOCONV_PATH . ' --format xlsx --output "' . $folderPath . "_" . $resultFileName . '" "' . $folderPath . $resultFileName . '"';
+        $process = new Process($unoconvCommand);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new UnprocessableEntityException($process->getErrorOutput());
+        }
+        return new \SplFileInfo($folderPath . "_" . $resultFileName);
+    }
+
+    /**
      * Converts a HTML file to PDF.
      * @param \SplFileInfo $body
      * @param string $resultFileName
@@ -232,6 +261,25 @@ class FileService
             throw new WordDocumentToPdfException($process->getErrorOutput());
         }
 
+        return new \SplFileInfo($folderPath . $resultFileName);
+    }
+
+    /**
+     * Converts a Excel document to PDF.
+     * @param \SplFileInfo $excelDocument
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws ExcelDocumentToPdfException
+     */
+    public function convertExcelDocumentToPdf(\SplFileInfo $excelDocument, string $resultFileName): \SplFileInfo
+    {
+        $folderPath = $this->temporaryFilesFolder->getRealPath() . "/";
+        $unoconvCommand ="HOME=".APACHE_HOME_DIR. " " . UNOCONV_PATH . ' --format pdf --output "' . $folderPath . $resultFileName . '" "' . $excelDocument->getRealPath() . '"';
+        $process = new Process($unoconvCommand);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ExcelDocumentToPdfException($process->getErrorOutput());
+        }
         return new \SplFileInfo($folderPath . $resultFileName);
     }
 
@@ -298,6 +346,22 @@ class FileService
         }
 
         throw new MergingWordDocumentException();
+    }
+
+    /**
+     * Merges a list of Excel documents.
+     * @param array $excelDocumentsToMerge
+     * @param string $resultFileName
+     * @return \SplFileInfo
+     * @throws MergingExcelDocumentException
+     */
+    public function mergeExcelDocuments(array $excelDocumentsToMerge, string $resultFileName): \SplFileInfo
+    {
+        if (count($excelDocumentsToMerge) == 1) {
+            return $excelDocumentsToMerge[0];
+        }
+        //to be defined
+        throw new MergingExcelDocumentException();
     }
 
     /**
