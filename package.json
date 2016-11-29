@@ -18,6 +18,8 @@
     "docxtemplater-image-module": "^1.0.4",
     "docxtemplater-link-module": "^0.1.0",
     "image-size": "^0.5.0",
-    "jszip": "^3.1.2"
+    "jszip": "^3.1.2",
+    "angular-expressions": "^0.3.0",
+    "xlsx-template": "^0.0.5"
   }
 }
