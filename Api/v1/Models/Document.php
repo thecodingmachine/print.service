@@ -235,7 +235,7 @@ class Document
                 }
                 continue;
             }
-            $formattedData[$key] = $this->formatDataForWordDocument($currentData);
+            $formattedData[$key] = $this->formatDataForExcelDocument($currentData);
         }
         return $formattedData;
     }
@@ -286,9 +286,11 @@ class Document
                 case AbstractTemplate::WORD_CONTENT_TYPE:
                     /** @var WordTemplate $currentTemplate */
                     $currentTemplate->populate($this->formattedDataForWordDocument);
+                    break;
                 case AbstractTemplate::EXCEL_CONTENT_TYPE:
                     /** @var ExcelTemplate $currentTemplate */
                     $currentTemplate->populate($this->formattedDataForExcelDocument);
+                    break;
             }
         }
     }
