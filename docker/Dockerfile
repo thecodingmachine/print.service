@@ -48,4 +48,6 @@ RUN echo "deb http://httpredir.debian.org/debian/ jessie main contrib non-free" 
 RUN apt-get update && \
     apt-get install -y ttf-mscorefonts-installer
 
+RUN echo "Europe/Paris" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+
 ENTRYPOINT ["/init"]
