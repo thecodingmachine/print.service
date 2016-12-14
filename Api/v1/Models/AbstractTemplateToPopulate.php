@@ -52,6 +52,9 @@ abstract class AbstractTemplateToPopulate extends AbstractTemplate
             case AbstractTemplate::EXCEL_CONTENT_TYPE:
                 $this->populatedTemplateFileExtension = ".xlsx";
                 break;
+            case AbstractTemplate::MAIL_CONTENT_TYPE:
+                $this->populatedTemplateFileExtension = ".txt";
+                break;
             default:
                 throw new ContentTypeException($contentType);
         }

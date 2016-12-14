@@ -16,6 +16,7 @@ abstract class AbstractTemplate
     const WORD_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     const PDF_CONTENT_TYPE = "application/pdf";
     const EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    const MAIL_CONTENT_TYPE = "multipart/alternative";
     /**
      * @var FileService
      */
@@ -73,6 +74,9 @@ abstract class AbstractTemplate
                 break;
             case AbstractTemplate::EXCEL_CONTENT_TYPE:
                 $this->templateFileExtension = ".xlsx";
+                break;
+            case AbstractTemplate::MAIL_CONTENT_TYPE:
+                $this->templateFileExtension = ".twig";
                 break;
             default:
                 throw new ContentTypeException($contentType);
