@@ -82,6 +82,11 @@ class FileService
         return substr(str_shuffle(str_repeat($x="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", ceil(5/strlen($x)))), 1, 5) . "_dt_" . time() . $ext;
     }
 
+    public function getAbsolutePath(string $filename): string
+    {
+        return $this->temporaryFilesFolder->getRealPath() . "/" . $filename;
+    }
+
     /**
      * Downloads a file.
      * @param $fileName
@@ -152,6 +157,23 @@ class FileService
             $populatedHtmlFile = new \SplFileObject($folderPath . $resultFileName, "w");
             $populatedHtmlFile->fwrite($twigTemplate->getHtml());
             return $populatedHtmlFile->getFileInfo();
+        } catch (\Exception $e) {
+            throw new UnprocessableEntityException($e->getMessage());
+        }
+    }
+
+    /**
+     * Populates a twig file.
+     * @param \SplFileInfo $file
+     * @param array $data
+     * @return string
+     * @throws UnprocessableEntityException
+     */
+    public function processTwigFile(\SplFileInfo $file, array $data): string
+    {
+        try {
+            $twigTemplate = new TwigTemplate($this->twigEnvironment, $this->getTemporaryFilepath($file->getFilename()), $data);
+            return $twigTemplate->getHtml();
         } catch (\Exception $e) {
             throw new UnprocessableEntityException($e->getMessage());
         }

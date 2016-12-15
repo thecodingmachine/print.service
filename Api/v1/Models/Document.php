@@ -87,6 +87,8 @@ class Document
             $this->formattedDataForWordDocument = $this->formatDataForWordDocument($this->data);
         } else if ($template->getContentType() == AbstractTemplate::EXCEL_CONTENT_TYPE && empty($this->formattedDataForExcelDocument)) {
             $this->formattedDataForExcelDocument = $this->formatDataForExcelDocument($this->data);
+        } else if ($template->getContentType() == AbstractTemplate::MAIL_CONTENT_TYPE && empty($this->formattedDataForHtml)) {
+            $this->formattedDataForHtml = $this->formatDataForHtml($this->data);
         }
     }
 
@@ -290,6 +292,10 @@ class Document
                 case AbstractTemplate::EXCEL_CONTENT_TYPE:
                     /** @var ExcelTemplate $currentTemplate */
                     $currentTemplate->populate($this->formattedDataForExcelDocument);
+                    break;
+                case AbstractTemplate::MAIL_CONTENT_TYPE:
+                    /** @var MailTemplate $currentTemplate */
+                    $currentTemplate->populate($this->formattedDataForHtml);
                     break;
             }
         }

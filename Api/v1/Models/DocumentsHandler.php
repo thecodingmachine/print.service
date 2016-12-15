@@ -108,7 +108,7 @@ class DocumentsHandler
         /** @var array $currentTemplateData */
         foreach ($templatesData as $currentTemplateData) {
 
-            if (!isset($currentTemplateData["order"]) || !is_int($currentTemplateData["order"]) || !isset($currentTemplateData["contentType"]) || empty($currentTemplateData["contentType"]) || !isset($currentTemplateData["url"]) || empty($currentTemplateData["url"])) {
+            if (!isset($currentTemplateData["order"]) || !is_int($currentTemplateData["order"]) || !isset($currentTemplateData["contentType"]) || empty($currentTemplateData["contentType"])) {
                 throw new BadRequestException();
             }
 
@@ -142,6 +142,17 @@ class DocumentsHandler
                         throw new MediaTypeException();
                     }
                     $document->addTemplate(new PdfTemplate($this->fileService, $order, $templateUrl));
+                    break;
+                case AbstractTemplate::MAIL_CONTENT_TYPE:
+                    if ($this->mediaType != $contentType) {
+                        throw new MediaTypeException();
+                    }
+
+                    $subjectUrl = isset($currentTemplateData["subjectUrl"]) && !empty($currentTemplateData["subjectUrl"]) ? $currentTemplateData["subjectUrl"] : null;
+                    $contentTextUrl = isset($currentTemplateData["contentTextUrl"]) && !empty($currentTemplateData["contentTextUrl"]) ? $currentTemplateData["contentTextUrl"] : null;
+                    $contentHTMLUrl = isset($currentTemplateData["contentHTMLUrl"]) && !empty($currentTemplateData["contentHTMLUrl"]) ? $currentTemplateData["contentHTMLUrl"] : null;
+
+                    $document->addTemplate(new MailTemplate($this->fileService, $order, $subjectUrl, $contentTextUrl, $contentHTMLUrl));
                     break;
                 default:
                     throw new ContentTypeException($contentType);
@@ -181,6 +192,9 @@ class DocumentsHandler
                 break;
             case AbstractTemplate::PDF_CONTENT_TYPE:
                 $this->mergeAsPdf();
+                break;
+            case AbstractTemplate::MAIL_CONTENT_TYPE:
+                $this->mergeAsMail();
                 break;
             default:
                 throw new MediaTypeException();
@@ -291,6 +305,22 @@ class DocumentsHandler
         }
     }
 
+    private function mergeAsMail()
+    {
+        /** @var Document $currentDocument */
+        foreach ($this->documents as $currentDocument) {
+            $currentTemplates = $currentDocument->getTemplates();
+
+            /** @var MailTemplate $currentTemplate */
+            foreach ($currentTemplates as $currentTemplate) {
+                if ($this->finalDocument) {
+                    throw new \Exception("Mails can't be merged!");
+                }
+                $this->finalDocument = $currentTemplate->getPopulatedTemplate();
+            }
+        }
+    }
+
     /**
      * @return \SplFileInfo
      */
@@ -304,6 +334,9 @@ class DocumentsHandler
      */
     public function getMediaType(): string
     {
+        if ($this->mediaType === AbstractTemplate::MAIL_CONTENT_TYPE) {
+            return $this->mediaType."; boundary=".MailTemplate::MULTIPART_BOUNDARY;
+        }
         return $this->mediaType;
     }
 
