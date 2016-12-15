@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
@@ -14,7 +15,7 @@ class HtmlTemplate extends AbstractTemplateToPopulate
 {
 
     /**
-     * @var string
+     * @var ContentInterface
      */
     private $headerTemplateUrl;
 
@@ -29,7 +30,7 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     private $populatedHeaderTemplate;
 
     /**
-     * @var string
+     * @var ContentInterface
      */
     private $footerTemplateUrl;
 
@@ -47,12 +48,12 @@ class HtmlTemplate extends AbstractTemplateToPopulate
      * HtmlTemplate constructor.
      * @param FileService $fileService
      * @param int $order
-     * @param string $templateUrl
-     * @param string|null $headerTemplateUrl
-     * @param string|null $footerTemplateUrl
+     * @param ContentInterface $templateUrl
+     * @param ContentInterface|null $headerTemplateUrl
+     * @param ContentInterface|null $footerTemplateUrl
      * @throws ContentTypeException
      */
-    public function __construct(FileService $fileService, int $order, string $templateUrl, string $headerTemplateUrl = null, string $footerTemplateUrl = null)
+    public function __construct(FileService $fileService, int $order, $templateUrl, $headerTemplateUrl = null, $footerTemplateUrl = null)
     {
         parent::__construct($fileService, AbstractTemplate::HTML_CONTENT_TYPE, $order, $templateUrl);
         $this->headerTemplateUrl = $headerTemplateUrl;
@@ -78,11 +79,11 @@ class HtmlTemplate extends AbstractTemplateToPopulate
     public function download()
     {
         if (!empty($this->headerTemplateUrl)) {
-            $this->headerTemplate = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->headerTemplateUrl);
+            $this->headerTemplate = $this->fileService->loadContent($this->fileService->generateRandomFileName($this->templateFileExtension), $this->headerTemplateUrl);
         }
 
         if (!empty($this->footerTemplateUrl)) {
-            $this->footerTemplate = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->footerTemplateUrl);
+            $this->footerTemplate = $this->fileService->loadContent($this->fileService->generateRandomFileName($this->templateFileExtension), $this->footerTemplateUrl);
         }
         
         parent::download();

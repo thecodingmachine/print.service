@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\UnprocessableEntityException;
 use Api\v1\Exceptions\WordDocumentToPdfException;
@@ -17,10 +18,10 @@ class WordTemplate extends AbstractTemplateToPopulate
      * WordTemplate constructor.
      * @param FileService $fileService
      * @param int $order
-     * @param string $templateUrl
+     * @param ContentInterface|null $templateUrl
      * @throws ContentTypeException
      */
-    public function __construct(FileService $fileService, int $order, string $templateUrl)
+    public function __construct(FileService $fileService, int $order, $templateUrl)
     {
         parent::__construct($fileService, AbstractTemplate::WORD_CONTENT_TYPE, $order, $templateUrl);
     }

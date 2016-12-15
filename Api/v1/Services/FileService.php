@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Services;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\MergingHtmlException;
 use Api\v1\Exceptions\MergingPdfException;
@@ -15,6 +16,7 @@ use GuzzleHttp\HandlerStack;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
+use Mouf\Annotations\varAnnotation;
 use Zend\Diactoros\Response;
 use GuzzleHttp\RequestOptions;
 use Mouf\Html\Renderer\Twig\TwigTemplate;
@@ -120,6 +122,31 @@ class FileService
             $this->removeFileFromDisk(new \SplFileInfo($fileDest));
             return null;
         }
+
+        return new \SplFileInfo($fileDest);
+    }
+
+    /**
+     * @param string $fileName
+     * @param ContentInterface $content
+     * @param bool $appendExtension
+     * @return \SplFileInfo|null
+     */
+    public function loadContent(string $fileName, ContentInterface $content, bool $appendExtension = false)
+    {
+        $fileDest = $filePath = $this->temporaryFilesFolder->getRealPath() . "/" . $fileName;
+        if ($appendExtension)
+        {
+            $fileDest = $fileDest . '.' . $content->getExtension();
+        }
+
+        $fp = fopen($fileDest, 'w');
+        if (!$content->out($fp)) {
+            fclose($fp);
+            $this->removeFileFromDisk(new \SplFileInfo($fileDest));
+            return null;
+        }
+        fclose($fp);
 
         return new \SplFileInfo($fileDest);
     }

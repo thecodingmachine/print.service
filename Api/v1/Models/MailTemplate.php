@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
@@ -18,7 +19,7 @@ class MailTemplate extends AbstractTemplateToPopulate
     const MULTIPART_BOUNDARY = "XZY";
 
     /**
-     * @var string
+     * @var ContentInterface
      */
     private $contentTextUrl;
 
@@ -28,7 +29,7 @@ class MailTemplate extends AbstractTemplateToPopulate
     private $contentTextTemplate;
 
     /**
-     * @var string
+     * @var ContentInterface
      */
     private $contentHTMLUrl;
 
@@ -38,17 +39,18 @@ class MailTemplate extends AbstractTemplateToPopulate
     private $contentHTMLTemplate;
 
     /**
-     * PdfTemplate constructor.
+     * MailTemplate constructor.
      * @param FileService $fileService
      * @param int $order
-     * @param string $templateUrl
-     * @throws ContentTypeException
+     * @param ContentInterface|null $subject
+     * @param ContentInterface|null $contentText
+     * @param ContentInterface|null $contentHTML
      */
-    public function __construct(FileService $fileService, int $order, string $subjectUrl, string $contentTextUrl, string $contentHTMLUrl)
+    public function __construct(FileService $fileService, int $order, $subject, $contentText, $contentHTML)
     {
-        parent::__construct($fileService, AbstractTemplate::MAIL_CONTENT_TYPE, $order, $subjectUrl);
-        $this->contentTextUrl = $contentTextUrl;
-        $this->contentHTMLUrl = $contentHTMLUrl;
+        parent::__construct($fileService, AbstractTemplate::MAIL_CONTENT_TYPE, $order, $subject);
+        $this->contentTextUrl = $contentText;
+        $this->contentHTMLUrl = $contentHTML;
     }
 
 
@@ -58,14 +60,14 @@ class MailTemplate extends AbstractTemplateToPopulate
      */
     public function download()
     {
-        $this->template = $this->fileService->downloadFile($this->fileService->generateRandomFileName('.txt'), $this->templateUrl);
+        $this->template = $this->fileService->loadContent($this->fileService->generateRandomFileName('.txt'), $this->templateUrl);
 
         if (!empty($this->contentTextUrl)) {
-            $this->contentTextTemplate = $this->fileService->downloadFile($this->fileService->generateRandomFileName('.txt'), $this->contentTextUrl);
+            $this->contentTextTemplate = $this->fileService->loadContent($this->fileService->generateRandomFileName('.txt'), $this->contentTextUrl);
         }
 
         if (!empty($this->contentHTMLUrl)) {
-            $this->contentHTMLTemplate = $this->fileService->downloadFile($this->fileService->generateRandomFileName('.html'), $this->contentHTMLUrl);
+            $this->contentHTMLTemplate = $this->fileService->loadContent($this->fileService->generateRandomFileName('.html'), $this->contentHTMLUrl);
         }
     }
 
@@ -148,12 +150,10 @@ EOL
     }
 
     /**
-     * Converts the template to PDF.
      * @throws HtmlToPdfException
-     * @throws WordDocumentToPdfException
      */
     public function convertToPdf()
     {
-        // TODO: Implement convertToPdf() method.
+        throw new HtmlToPdfException("Mail conversion to PDF not supported");
     }
 }
