@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Services\FileService;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -33,7 +34,7 @@ abstract class AbstractTemplate
     protected $order;
 
     /**
-     * @var string
+     * @var ContentInterface
      */
     protected $templateUrl;
 
@@ -52,15 +53,15 @@ abstract class AbstractTemplate
      * @param FileService $fileService
      * @param string $contentType
      * @param int $order
-     * @param string $templateUrl
+     * @param ContentInterface|null $template
      * @throws ContentTypeException
      */
-    public function __construct(FileService $fileService, string $contentType, int $order, string $templateUrl)
+    public function __construct(FileService $fileService, string $contentType, int $order, $template)
     {
         $this->fileService = $fileService;
         $this->contentType = $contentType;
         $this->order = $order;
-        $this->templateUrl = $templateUrl;
+        $this->templateUrl= $template;
 
         switch ($this->contentType) {
             case AbstractTemplate::HTML_CONTENT_TYPE:
@@ -94,7 +95,7 @@ abstract class AbstractTemplate
      */
     public function download()
     {
-        $this->template = $this->fileService->downloadFile($this->fileService->generateRandomFileName($this->templateFileExtension), $this->templateUrl);
+        $this->template = $this->fileService->loadContent($this->fileService->generateRandomFileName($this->templateFileExtension), $this->templateUrl);
         if ($this->template === null)
             throw new FileNotFoundException('unable to download remote templates.', 404);
     }

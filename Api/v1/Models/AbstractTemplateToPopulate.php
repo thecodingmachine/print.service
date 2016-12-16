@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Exceptions\HtmlToPdfException;
 use Api\v1\Exceptions\UnprocessableEntityException;
@@ -35,12 +36,12 @@ abstract class AbstractTemplateToPopulate extends AbstractTemplate
      * @param FileService $fileService
      * @param string $contentType
      * @param int $order
-     * @param string $templateUrl
+     * @param ContentInterface|null $template
      * @throws ContentTypeException
      */
-    public function __construct(FileService $fileService, string $contentType, int $order, string $templateUrl)
+    public function __construct(FileService $fileService, string $contentType, int $order, $template)
     {
-        parent::__construct($fileService, $contentType, $order, $templateUrl);
+        parent::__construct($fileService, $contentType, $order, $template);
 
         switch ($this->contentType) {
             case AbstractTemplate::HTML_CONTENT_TYPE:

@@ -1,6 +1,7 @@
 <?php
 namespace Api\v1\Models;
 
+use Api\v1\Content\ContentInterface;
 use Api\v1\Exceptions\ContentTypeException;
 use Api\v1\Services\FileService;
 
@@ -15,12 +16,12 @@ class PdfTemplate extends AbstractTemplate
      * PdfTemplate constructor.
      * @param FileService $fileService
      * @param int $order
-     * @param string $templateUrl
+     * @param ContentInterface|null $template
      * @throws ContentTypeException
      */
-    public function __construct(FileService $fileService, int $order, string $templateUrl)
+    public function __construct(FileService $fileService, int $order, $template)
     {
-        parent::__construct($fileService, AbstractTemplate::PDF_CONTENT_TYPE, $order, $templateUrl);
+        parent::__construct($fileService, AbstractTemplate::PDF_CONTENT_TYPE, $order, $template);
     }
 
 }
